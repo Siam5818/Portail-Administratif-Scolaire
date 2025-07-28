@@ -21,11 +21,17 @@ class ElevePolicy
      */
     public function view(User $user, Eleve $eleve): bool
     {
-        if ($user->role === 'admin' || $user->role === 'enseignant') {
+        if ($user->role === 'admin') {
             return true;
         }
+
+        if ($user->role === 'enseignant' && $user->enseignant && $user->enseignant->classe_id === $eleve->classe_id) {
+            return true;
+        }
+
         return $user->eleve && $user->eleve->id === $eleve->id;
     }
+
 
     /**
      * Determine whether the user can create models.

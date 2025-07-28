@@ -22,4 +22,9 @@ class Enseignant extends Model
     {
         return $this->hasMany(Matiere::class);
     }
+
+    public function classe()
+    {
+        return $this->belongsTo(Classe::class);
+    }
 }

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\services;
+namespace App\Services;
 
 use App\Models\Classe;
 
-class ClasseServices{
+class ClasseServices
+{
     public function index()
     {
         return Classe::all();
@@ -31,5 +32,19 @@ class ClasseServices{
     {
         Classe::destroy($id);
         return true;
+    }
+
+    public function search(string $query)
+    {
+        if (!$query || trim($query) === '') {
+            return [];
+        }
+
+        $motCle = strtolower($query);
+
+        return Classe::where(function ($q) use ($motCle) {
+            $q->whereRaw('LOWER(libelle) LIKE ?', ["%$motCle%"])
+                ->orWhereRaw('LOWER(niveau) LIKE ?', ["%$motCle%"]);
+        })->get();
     }
 }

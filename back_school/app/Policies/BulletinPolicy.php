@@ -21,7 +21,23 @@ class BulletinPolicy
      */
     public function view(User $user, Bulletin $bulletin): bool
     {
-        return $user->id === $bulletin->user_id || $user->role === 'admin';
+        // Admin peut tout voir
+        if ($user->role === 'admin') {
+            return true;
+        }
+
+        // Élève concerné par le bulletin
+        if ($user->role === 'eleve' && $user->eleve && $user->eleve->id === $bulletin->eleve_id) {
+            return true;
+        }
+
+        // Tuteur de l’élève
+        if ($user->role === 'tuteur' && $user->tuteur) {
+            return $user->tuteur->enfants->contains('id', $bulletin->eleve_id);
+        }
+
+        // Enseignant peut voir tous
+        return $user->role === 'enseignant';
     }
 
     /**
@@ -37,7 +53,7 @@ class BulletinPolicy
      */
     public function update(User $user, Bulletin $bulletin): bool
     {
-        return $user->id === $bulletin->user_id || $user->role === 'admin';
+        return $user->role === 'admin' || $user->role === 'enseignant';
     }
 
     /**

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('eleve_id')->constrained('eleves')->onDelete('cascade');
             $table->string('periode');
             $table->year('annee');
-            $table->string('pdf_name')->nullable();
+            $table->string('pdf_name')->nullable()->unique();
             $table->timestamps();
         });
     }

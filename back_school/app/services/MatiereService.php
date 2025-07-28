@@ -1,13 +1,14 @@
 <?php
 
-namespace App\services;
+namespace App\Services;
 
 use App\Models\Matiere;
 
-class MatiereService{
+class MatiereService
+{
     public function index()
     {
-        return Matiere::all();
+        return Matiere::with(['enseignant', 'classe'])->get();
     }
 
     public function store(array $request)
@@ -17,7 +18,7 @@ class MatiereService{
 
     public function show($id)
     {
-        return Matiere::find($id);
+        return Matiere::with(['enseignant', 'classe'])->findOrFail($id);
     }
 
     public function update(array $request, $id)
@@ -31,5 +32,16 @@ class MatiereService{
     {
         Matiere::destroy($id);
         return true;
+    }
+
+    public function search(string $query)
+    {
+        if (!$query || trim($query) === '') {
+            return [];
+        }
+
+        $motCle = strtolower($query);
+
+        return Matiere::whereRaw('LOWER(nom) LIKE ?', ["%$motCle%"])->get();
     }
 }

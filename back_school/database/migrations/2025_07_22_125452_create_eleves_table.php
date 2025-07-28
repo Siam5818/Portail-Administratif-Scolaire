@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('eleves', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('nom');
-            $table->string('prenom');
             $table->date('date_naissance')->nullable();
             $table->foreignId('classe_id')->constrained('classes')->onDelete('set null')->nullable();
             $table->string('document_justificatif')->nullable();
+            $table->foreignId('tuteur_id')->nullable()->constrained('tuteurs')->onDelete('set null');
             $table->timestamps();
         });
     }

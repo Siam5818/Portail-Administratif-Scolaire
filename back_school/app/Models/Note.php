@@ -13,6 +13,10 @@ class Note extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'note' => 'float',
+    ];
+
     public function eleve()
     {
         return $this->belongsTo(Eleve::class);
