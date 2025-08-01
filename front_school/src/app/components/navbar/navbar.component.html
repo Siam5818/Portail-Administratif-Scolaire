@@ -1,0 +1,61 @@
+<nav class="bg-white shadow-md px-4 py-3 flex justify-between items-center">
+  <!-- Logo -->
+  <div class="text-xl font-bold text-blue-600">School Portail</div>
+
+  <!-- Menu burger (mobile) -->
+  <button class="md:hidden text-gray-700 text-2xl" (click)="toggleMenu()">
+    ☰
+  </button>
+
+  <!-- Menu principal -->
+  <ul
+    class="md:flex gap-6 text-gray-700 font-medium items-center"
+    [ngClass]="{
+      hidden: !isMenuOpen,
+      flex: isMenuOpen,
+      'flex-col': isMenuOpen,
+      'md:flex-row': true,
+      'mt-4': isMenuOpen
+    }"
+  >
+    <!-- Admin -->
+    <li *ngIf="role === 'admin'">
+      <a routerLink="/dashboard" class="hover:text-blue-600">Dashboard</a>
+    </li>
+    <li *ngIf="role === 'admin'">
+      <a routerLink="/gestion-utilisateurs" class="hover:text-blue-600">Utilisateurs</a>
+    </li>
+    <li *ngIf="role === 'admin'">
+      <a routerLink="/gestion-classes" class="hover:text-blue-600">Classes</a>
+    </li>
+    <li *ngIf="role === 'admin'">
+      <a routerLink="/gestion-matieres" class="hover:text-blue-600">Matières</a>
+    </li>
+    <li *ngIf="role === 'admin'">
+      <a routerLink="/bulletins" class="hover:text-blue-600">Notes & Bulletins</a>
+    </li>
+
+    <!-- Enseignant -->
+    <li *ngIf="role === 'enseignant'">
+      <a routerLink="/mes-classes" class="hover:text-blue-600">Mes Classes</a>
+    </li>
+    <li *ngIf="role === 'enseignant'">
+      <a routerLink="/saisie-notes" class="hover:text-blue-600">Saisie des Notes</a>
+    </li>
+
+    <!-- Élève / Tuteur -->
+    <li *ngIf="role === 'eleve' || role === 'tuteur'">
+      <a routerLink="/mes-bulletins" class="hover:text-blue-600">Mes Bulletins</a>
+    </li>
+
+    <!-- Déconnexion -->
+    <li>
+      <button
+        (click)="logout()"
+        class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
+      >
+        Déconnexion
+      </button>
+    </li>
+  </ul>
+</nav>

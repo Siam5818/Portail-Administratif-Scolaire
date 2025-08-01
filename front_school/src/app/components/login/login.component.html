@@ -1,0 +1,55 @@
+<div class="mt-40 flex justify-center">
+  <div class="w-full max-w-md">
+    <h2 class="text-2xl font-semibold text-blue-600 mb-6 text-center">Se connecter</h2>
+
+    <!-- Messages -->
+    <div *ngIf="successMessage" class="bg-green-100 text-green-700 p-3 rounded mb-4 text-center">
+      {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage" class="bg-red-100 text-red-700 p-3 rounded mb-4 text-center">
+      {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="space-y-4">
+
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Adresse Email</label>
+        <input
+          type="email"
+          id="email"
+          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          formControlName="email"
+        />
+        <div *ngIf="submittedForm && loginForm.get('email')?.errors" class="text-red-600 text-sm mt-1">
+          <div *ngIf="loginForm.get('email')?.errors?.['required']">L’email est requis.</div>
+          <div *ngIf="loginForm.get('email')?.errors?.['email']">Email invalide.</div>
+        </div>
+      </div>
+
+      <!-- Mot de passe -->
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+        <input
+          type="password"
+          id="password"
+          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          formControlName="password"
+        />
+        <div *ngIf="submittedForm && loginForm.get('password')?.errors" class="text-red-600 text-sm mt-1">
+          <div *ngIf="loginForm.get('password')?.errors?.['required']">Mot de passe requis.</div>
+          <div *ngIf="loginForm.get('password')?.errors?.['minlength']">
+            Minimum {{ loginForm.get('password')?.errors?.['minlength'].requiredLength }} caractères.
+          </div>
+        </div>
+      </div>
+
+      <!-- Bouton -->
+      <div>
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
+          Se connecter
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
