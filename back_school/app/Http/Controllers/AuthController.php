@@ -17,51 +17,6 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
     /**
-     * Inscription d'un élève avec un tuteur
-     * Seul un admin peut inscrire un élève
-     */
-    public function registerEleveAvecTuteur(Request $request)
-    {
-        if (Auth::user()->role !== 'admin') {
-            return response()->json(['message' => 'Accès refusé'], 403);
-        }
-        // Validation des données d'inscription
-        $validatedData = $request->validate([
-            'eleve.nom' => 'required|string|max:255',
-            'eleve.prenom' => 'required|string|max:255',
-            'eleve.email' => 'required|email|unique:users,email',
-            'eleve.date_naissance' => 'nullable|date',
-            'eleve.classe_id' => 'nullable|exists:classes,id',
-            'eleve.document_justificatif' => 'nullable|string',
-            'tuteur.nom' => 'required|string|max:255',
-            'tuteur.prenom' => 'required|string|max:255',
-            'tuteur.email' => 'required|email|unique:users,email',
-            'tuteur.telephone' => 'nullable|string|max:20',
-            'tuteur.profession' => 'nullable|string|max:255',
-        ]);
-
-        $eleveData = $validatedData['eleve'];
-        $tuteurData = $validatedData['tuteur'];
-
-        $result = $this->authService->createEleveAvecTuteur($eleveData, $tuteurData);
-
-        $eleve = $result['eleve'];
-        $eleveUser = $result['eleveUser'];
-        $tuteurUser = $result['tuteurUser'];
-
-        // Envoi des emails
-        //$tuteurUser->notify(new TuteurWelcomeNotification('Passer123!'));
-        //$eleveUser->notify(new EleveWelcomeNotification('Passer123!'));
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Inscription réussie',
-            'eleve' => $eleve,
-            'tuteur' => $eleve->tuteur ?? null,
-        ], 201);
-    }
-
-    /**
      * Authentification utilisateur + token Sanctum
      */
     public function login(Request $request)
@@ -81,7 +36,7 @@ class AuthController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Connexion réussie',
+            'message' => 'Connexion reussie',
             'user' => $user,
             'access_token' => $token,
             'token_type' => 'Bearer'
