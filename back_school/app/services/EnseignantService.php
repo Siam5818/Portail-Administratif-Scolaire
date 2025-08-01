@@ -20,6 +20,7 @@ class EnseignantService
 
         try {
             $defaultPassword = 'Passer123!';
+            // Change password : passer25
             $user = User::create([
                 'nom' => $data['nom'],
                 'prenom' => $data['prenom'],
