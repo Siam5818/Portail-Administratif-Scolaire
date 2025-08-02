@@ -34,13 +34,16 @@ class TuteurWelcomeNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+        $frontendUrl = config('notifications.welcome.frontend_url');
+        
         return (new MailMessage)
             ->subject('Bienvenue sur le portail scolaire')
             ->greeting('Bonjour ' . $notifiable->prenom . ' 👋')
             ->line('Votre compte de tuteur a été créé avec succès.')
-            ->line('📧 Email : ' . $notifiable->email)
-            ->line('🔑 Mot de passe par défaut : ' . $this->defaultPassword)
-            ->action('Vous pourrez le modifier une fois connecté.', url('http://127.0.0.1:4200/login'))
+            ->line('Email : ' . $notifiable->email)
+            ->line('Mot de passe par défaut : ' . $this->defaultPassword)
+            ->line('Vous pourrez le modifier une fois connecté.')
+            ->action('Se connecter au portail', url($frontendUrl . '/login'))
             ->line('Merci et à très bientôt !');
     }
 

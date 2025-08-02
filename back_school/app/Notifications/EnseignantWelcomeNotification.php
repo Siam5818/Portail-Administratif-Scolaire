@@ -34,12 +34,16 @@ class EnseignantWelcomeNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+        $frontendUrl = config('notifications.welcome.frontend_url');
+        
         return (new MailMessage)
-            ->greeting('Bienvenue ' . $notifiable->name . ' 🎉')
+            ->subject('Bienvenue sur le portail scolaire')
+            ->greeting('Bienvenue ' . $notifiable->prenom . ' 🎉')
             ->line('Votre compte enseignant a été créé avec succès.')
-            ->line('Voici votre mot de passe par défaut : **' . $this->defaultPassword . '**')
+            ->line('Email : ' . $notifiable->email)
+            ->line('Mot de passe par défaut : ' . $this->defaultPassword)
             ->line('Vous pourrez le modifier une fois connecté.')
-            ->action('Se connecter', url('http://127.0.0.1:4200/login'))
+            ->action('Se connecter au portail', url($frontendUrl . '/login'))
             ->line('Merci de rejoindre notre plateforme éducative !');
     }
 

@@ -33,6 +33,8 @@ class EleveWelcomeNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+        $frontendUrl = config('notifications.welcome.frontend_url');
+        
         return (new MailMessage)
             ->subject('Bienvenue sur le portail scolaire 🎓')
             ->greeting('Salut ' . $notifiable->prenom)
@@ -40,7 +42,7 @@ class EleveWelcomeNotification extends Notification
             ->line('Email : ' . $notifiable->email)
             ->line('Mot de passe par défaut : ' . $this->password)
             ->line('Vous pourrez le modifier une fois connecté.')
-            ->action('Connecte-toi pour découvrir +.', url('http://127.0.0.1:4200/login'))
+            ->action('Se connecter au portail', url($frontendUrl . '/login'))
             ->line('À très bientôt sur le portail !');
     }
 

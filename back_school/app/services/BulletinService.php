@@ -7,9 +7,17 @@ use App\Models\Eleve;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Services\NotificationService;
 
 class BulletinService
 {
+    protected NotificationService $notificationService;
+
+    public function __construct(NotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }
+
     /**
      * Génère un bulletin pour un élève donné, à une période et une année précises
      */
@@ -44,6 +52,9 @@ class BulletinService
         Storage::disk('public')->put("bulletins/{$pdfFileName}", $pdf->output());
 
         $bulletin->update(['pdf_name' => $pdfFileName]);
+
+        // Envoi des notifications
+        $this->notificationService->envoyerNotificationsBulletin($bulletin);
 
         return $bulletin;
     }
@@ -140,4 +151,5 @@ class BulletinService
 
         return $query->with('eleve')->get();
     }
+
 }

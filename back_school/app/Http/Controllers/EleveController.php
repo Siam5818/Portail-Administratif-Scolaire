@@ -5,16 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Eleve;
 use Illuminate\Http\Request;
 use App\Services\EleveServices;
+use App\Services\NotificationService;
 use App\Http\Requests\StoreEleveRequest;
-use App\Notifications\EleveWelcomeNotification;
-use App\Notifications\TuteurWelcomeNotification;
 
 class EleveController extends Controller
 {
     protected EleveServices $eleveServices;
-    public function __construct(EleveServices $eleveServices)
+    protected NotificationService $notificationService;
+
+    public function __construct(EleveServices $eleveServices, NotificationService $notificationService)
     {
         $this->eleveServices = $eleveServices;
+        $this->notificationService = $notificationService;
         $this->middleware('auth:sanctum');
     }
     /**
@@ -43,15 +45,13 @@ class EleveController extends Controller
             $eleve = $result['eleve'];
             $defaultPasswordEleve = $result['elevePassword'];
 
-            // Optionally, you can send a welcome notification here
-            $eleve->user->notify(new EleveWelcomeNotification($defaultPasswordEleve));
-
-            if ($result['tuteurPassword']) {
-                $eleve->tuteur->user->notify(new TuteurWelcomeNotification($result['tuteurPassword']));
-                logger("Nouveau tuteur créé — envoi de l’e-mail");
-            } else {
-                logger("Tuteur déjà existant — pas de notification envoyée");
-            }
+            // Envoi des notifications de bienvenue
+            $this->notificationService->envoyerNotificationsCreationEleve(
+                $eleve, 
+                $defaultPasswordEleve, 
+                $result['tuteurPassword'] ?? null
+            );
+            
             logger($result);
 
             return response()->json(['message' => 'Eleve créé avec succès', 'eleve' => $result], 201);

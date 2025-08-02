@@ -103,7 +103,7 @@ class BulletinController extends Controller
         );
 
         return response()->json([
-            'message' => 'Bulletin mis à jour et PDF regénéré.',
+            'message' => 'Bulletin mis à jour et PDF regénéré. Notifications envoyées.',
             'bulletin_id' => $updatedBulletin->id,
             'pdf' => $updatedBulletin->pdf_url,
         ], 200);
