@@ -77,10 +77,10 @@ export class AuthService {
       case 'admin':
         return '/dashboard';
       case 'enseignant':
-        return '/espce-ensignant';
+        return '/esapce-ensignant';
       case 'tuteur':
       case 'eleve':
-        return '/Accueil';
+        return '/espace-famille';
       default:
         return null;
     }
