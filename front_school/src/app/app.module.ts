@@ -15,11 +15,20 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { DashprofComponent } from './components/dashprof/dashprof.component';
-import { DasheleveComponent } from './components/dasheleve/dasheleve.component';
 import { DashfamilleComponent } from './components/dashfamille/dashfamille.component';
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, FooterComponent, LoginComponent, PageNotFoundComponent, DashboardComponent, ChangePasswordComponent, DashprofComponent, DasheleveComponent, DashfamilleComponent],
+  declarations: [
+    AppComponent,
+    NavbarComponent,
+    FooterComponent,
+    LoginComponent,
+    PageNotFoundComponent,
+    DashboardComponent,
+    ChangePasswordComponent,
+    DashprofComponent,
+    DashfamilleComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

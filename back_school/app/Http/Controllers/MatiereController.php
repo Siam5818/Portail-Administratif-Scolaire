@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreMatiereRequest;
+use App\Models\Matiere;
 use Illuminate\Http\Request;
 use App\Services\MatiereService;
+use App\Http\Requests\StoreMatiereRequest;
 
 class MatiereController extends Controller
 {
@@ -23,6 +24,7 @@ class MatiereController extends Controller
     public function __construct(MatiereService $matiereService)
     {
         $this->matiereService = $matiereService;
+        $this->middleware('auth:sanctum');
     }
     /**
      * Display a listing of the resource.
@@ -41,6 +43,7 @@ class MatiereController extends Controller
      */
     public function store(StoreMatiereRequest $request)
     {
+        $this->authorize('create', Matiere::class);
         try {
             $matiere = $this->matiereService->store($request->validated());
             return response()->json($matiere, 201);
@@ -54,6 +57,9 @@ class MatiereController extends Controller
      */
     public function show(string $id)
     {
+        $matiere = Matiere::findOrFail($id);
+
+        $this->authorize('view', $matiere);
         try {
             return response()->json($this->matiereService->show($id), 200);
         } catch (\Exception $e) {
@@ -66,6 +72,9 @@ class MatiereController extends Controller
      */
     public function update(StoreMatiereRequest $request, string $id)
     {
+        $matiere = Matiere::findOrFail($id);
+
+        $this->authorize('update', $matiere);
         try {
             $matiere = $this->matiereService->update($request->validated(), $id);
             return response()->json($matiere, 200);
@@ -79,9 +88,12 @@ class MatiereController extends Controller
      */
     public function destroy(string $id)
     {
+        $matiere = Matiere::findOrFail($id);
+
+        $this->authorize('delete', $matiere);
         try {
             $this->matiereService->destroy($id);
-            return response()->json(['message' => 'Matiere supprimée avec succès'], 204);
+            return response()->json(['message' => 'Matiere supprimée avec succès'], 200);
         } catch (\Exception $e) {
             return $this->jsonError('la suppression de la matière', $e);
         }

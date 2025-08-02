@@ -8,11 +8,17 @@ use Illuminate\Http\Request;
 
 class ClasseController extends Controller
 {
+    /**
+     * The ClasseService instance.
+     *
+     * @var ClasseServices
+     */
     protected $classeService;
 
     public function __construct()
     {
         $this->classeService = new ClasseServices();
+        $this->middleware('auth:sanctum');
     }
 
     /**
@@ -33,6 +39,7 @@ class ClasseController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Classe::class);
         $validated = $request->validate([
             'libelle' => 'required|string|max:255',
             'niveau' => 'required|string|max:100',
@@ -51,11 +58,14 @@ class ClasseController extends Controller
      */
     public function show(string $id)
     {
+        $classe = Classe::find($id);
+        if (!$classe) {
+            return response()->json(['message' => 'Classe non trouvée'], 404);
+        }
+
+        $this->authorize('view', $classe);
         try {
             $classe = $this->classeService->show($id);
-            if (!$classe) {
-                return response()->json(['message' => 'Classe non trouvée'], 404);
-            }
             return response()->json($classe, 200);
         } catch (\Throwable $e) {
             return response()->json(['message' => 'Classe introuvable', 'error' => $e->getMessage()], 404);
@@ -67,16 +77,19 @@ class ClasseController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $classe = Classe::find($id);
+        if (!$classe) {
+            return response()->json(['message' => 'Classe non trouvée'], 404);
+        }
+
+        $this->authorize('update', $classe);
+
         $validated = $request->validate([
             'libelle' => 'required|string|max:255',
             'niveau' => 'required|string|max:100',
         ]);
 
         try {
-            $classe = Classe::find($id);
-            if (!$classe) {
-                return response()->json(['message' => 'Classe non trouvée'], 404);
-            }
             $classe = $this->classeService->update($validated, $id);
             return response()->json(['message' => 'Classe mise à jour avec succès', 'classe' => $classe], 200);
         } catch (\Throwable $e) {
@@ -89,11 +102,14 @@ class ClasseController extends Controller
      */
     public function destroy(string $id)
     {
+        $classe = Classe::find($id);
+        if (!$classe) {
+            return response()->json(['message' => 'Classe non trouvée'], 404);
+        }
+
+        $this->authorize('delete', $classe);
+
         try {
-            $classe = Classe::find($id);
-            if (!$classe) {
-                return response()->json(['message' => 'Classe non trouvée'], 404);
-            }
             $this->classeService->destroy($id);
             return response()->json(['message' => 'Classe supprimée avec succès'], 200);
         } catch (\Throwable $e) {

@@ -39,7 +39,7 @@ class EnseignantWelcomeNotification extends Notification
             ->line('Votre compte enseignant a été créé avec succès.')
             ->line('Voici votre mot de passe par défaut : **' . $this->defaultPassword . '**')
             ->line('Vous pourrez le modifier une fois connecté.')
-            ->action('Se connecter', url('http://127.0.0.1:8000'))
+            ->action('Se connecter', url('http://127.0.0.1:4200/login'))
             ->line('Merci de rejoindre notre plateforme éducative !');
     }
 

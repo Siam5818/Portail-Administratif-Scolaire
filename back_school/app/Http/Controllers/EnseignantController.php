@@ -2,19 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreEnseignantRequest;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use App\Services\EnseignantService;
-use App\Notifications\EnseignantWelcomeNotification;
+use App\Models\Enseignant;
 use Illuminate\Http\Request;
+use App\Services\EnseignantService;
+use App\Http\Requests\StoreEnseignantRequest;
+use App\Http\Requests\UpdateEnseignantRequest;
+use App\Notifications\EnseignantWelcomeNotification;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class EnseignantController extends Controller
 {
+    /**
+     * The EnseignantService instance.
+     *
+     * @var EnseignantService
+     */
     protected $proService;
 
     public function __construct()
     {
         $this->proService = new EnseignantService();
+        $this->middleware('auth:sanctum');
     }
     /**
      * Display a listing of the resource.
@@ -34,6 +42,7 @@ class EnseignantController extends Controller
      */
     public function store(StoreEnseignantRequest $request)
     {
+        $this->authorize('create', Enseignant::class);
         $validated = $request->validated();
 
         try {
@@ -54,11 +63,11 @@ class EnseignantController extends Controller
      */
     public function show(string $id)
     {
+        $enseignant = Enseignant::findOrFail($id);
+
+        $this->authorize('view', $enseignant);
         try {
             $enseignant = $this->proService->show($id);
-            if (!$enseignant) {
-                return response()->json(['message' => 'Enseignant non trouvé'], 404);
-            }
             return response()->json($enseignant, 200);
         } catch (\Throwable $e) {
             return $this->jsonError('Erreur lors de la récupération de l\'enseignant', $e);
@@ -68,9 +77,12 @@ class EnseignantController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreEnseignantRequest $request, string $id)
+    public function update(UpdateEnseignantRequest $request, string $id)
     {
         try {
+            $enseignant = Enseignant::findOrFail($id);
+            $this->authorize('update', $enseignant);
+
             $EnseiUpdate = $this->proService->update($request->validated(), $id);
             return response()->json(['message' => 'Enseignant mis à jour avec succès', 'enseignant' => $EnseiUpdate], 200);
         } catch (ModelNotFoundException $e) {
@@ -88,8 +100,10 @@ class EnseignantController extends Controller
      */
     public function destroy(string $id)
     {
-        try {
+        $enseignant = Enseignant::findOrFail($id);
 
+        $this->authorize('delete', $enseignant);
+        try {
             $this->proService->destroy($id);
 
             return response()->json(['message' => 'Enseignant supprimé avec succès'], 200);

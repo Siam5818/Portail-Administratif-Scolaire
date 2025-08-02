@@ -15,12 +15,12 @@ Route::prefix('v1')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 
     Route::middleware('auth:sanctum')->group(function () {
-        Route::get('/classes-search', [ClasseController::class, 'search']);
-        Route::get('/enseignants-search', [EnseignantController::class, 'search']);
-        Route::get('/eleves-search', [EleveController::class, 'search']);
-        Route::get('/matieres-search', [MatiereController::class, 'search']);
-        Route::get('/notes-search', [NoteController::class, 'search']);
-        Route::get('/bulletins-search', [BulletinController::class, 'search']);
+        Route::get('/classes/search', [ClasseController::class, 'search']);
+        Route::get('/enseignants/search', [EnseignantController::class, 'search']);
+        Route::get('/eleves/search', [EleveController::class, 'search']);
+        Route::get('/matieres/search', [MatiereController::class, 'search']);
+        Route::get('/notes/search', [NoteController::class, 'search']);
+        Route::get('/bulletins/search', [BulletinController::class, 'search']);
 
         Route::post('/change-password', [AuthController::class, 'changePassword']);
 

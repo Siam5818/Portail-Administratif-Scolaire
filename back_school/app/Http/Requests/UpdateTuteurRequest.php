@@ -22,6 +22,7 @@ class UpdateTuteurRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
             'nom' => 'sometimes|string|max:255',
             'prenom' => 'sometimes|string|max:255',

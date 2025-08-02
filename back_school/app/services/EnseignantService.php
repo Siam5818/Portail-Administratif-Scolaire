@@ -54,26 +54,22 @@ class EnseignantService
     public function update(array $request, $id)
     {
         DB::beginTransaction();
-        try {
-            $enseignant = Enseignant::with('user')->findOrFail($id);
 
-            $enseignant->user->update([
-                'nom' => $request['nom'],
-                'prenom' => $request['prenom'],
-                'email' => $request['email'],
-            ]);
+        $enseignant = Enseignant::with('user')->findOrFail($id);
 
-            $enseignant->update([
-                'specialite' => $request['specialite'] ?? $enseignant->specialite,
-                'classe_id' => $request['classe_id'] ?? $enseignant->classe_id,
-            ]);
+        $enseignant->user->update([
+            'nom' => $request['nom'],
+            'prenom' => $request['prenom'],
+            'email' => $request['email'],
+        ]);
 
-            DB::commit();
-            return $enseignant->load('user');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            throw $e;
-        }
+        $enseignant->update([
+            'specialite' => $request['specialite'] ?? $enseignant->specialite,
+            'classe_id' => $request['classe_id'] ?? $enseignant->classe_id,
+        ]);
+
+        DB::commit();
+        return $enseignant->load('user');
     }
 
     public function destroy($id)

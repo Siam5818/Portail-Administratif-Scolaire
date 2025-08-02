@@ -14,7 +14,8 @@ class TuteurWelcomeNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(string $defaultPassword) {
+    public function __construct(string $defaultPassword)
+    {
         $this->defaultPassword = $defaultPassword;
     }
 
@@ -39,7 +40,7 @@ class TuteurWelcomeNotification extends Notification
             ->line('Votre compte de tuteur a été créé avec succès.')
             ->line('📧 Email : ' . $notifiable->email)
             ->line('🔑 Mot de passe par défaut : ' . $this->defaultPassword)
-            ->action('Vous pourrez le modifier une fois connecté.', url('http://127.0.0.1:8000'))
+            ->action('Vous pourrez le modifier une fois connecté.', url('http://127.0.0.1:4200/login'))
             ->line('Merci et à très bientôt !');
     }
 

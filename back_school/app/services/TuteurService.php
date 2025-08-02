@@ -76,9 +76,29 @@ class TuteurService
 
     public function update(array $request, $id)
     {
-        $Tuteur = Tuteur::findOrFail($id);
-        $Tuteur->update($request);
-        return $Tuteur;
+        DB::beginTransaction();
+
+        try {
+            $tuteur = Tuteur::with('user')->findOrFail($id);
+
+            // Données pour la table users
+            $userData = array_intersect_key($request, array_flip(['nom', 'prenom', 'email']));
+            if (!empty($userData)) {
+                $tuteur->user->update($userData);
+            }
+
+            // Données pour la table tuteurs
+            $tuteurData = array_intersect_key($request, array_flip(['telephone', 'profession']));
+            if (!empty($tuteurData)) {
+                $tuteur->update($tuteurData);
+            }
+
+            DB::commit();
+            return $tuteur->load('user');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
 
     public function search(string $query)

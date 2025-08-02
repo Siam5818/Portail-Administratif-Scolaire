@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreEleveRequest;
-use App\Services\EleveServices;
+use App\Models\Eleve;
 use Illuminate\Http\Request;
+use App\Services\EleveServices;
+use App\Http\Requests\StoreEleveRequest;
 use App\Notifications\EleveWelcomeNotification;
 use App\Notifications\TuteurWelcomeNotification;
 
@@ -14,6 +15,7 @@ class EleveController extends Controller
     public function __construct(EleveServices $eleveServices)
     {
         $this->eleveServices = $eleveServices;
+        $this->middleware('auth:sanctum');
     }
     /**
      * Display a listing of the resource.
@@ -33,6 +35,7 @@ class EleveController extends Controller
      */
     public function store(StoreEleveRequest $request)
     {
+        $this->authorize('create', Eleve::class);
         $validated = $request->validated();
         logger($validated);
         try {
@@ -62,11 +65,10 @@ class EleveController extends Controller
      */
     public function show(string $id)
     {
+        $eleve = Eleve::findOrFail($id);
+        $this->authorize('view', $eleve);
         try {
             $eleve = $this->eleveServices->show($id);
-            if (!$eleve) {
-                return response()->json(['message' => 'Eleve non trouvé'], 404);
-            }
             return response()->json($eleve, 200);
         } catch (\Throwable $e) {
             return response()->json(['message' => 'Erreur lors de la récupération.', 'error' => $e->getMessage()], 500);
@@ -79,6 +81,8 @@ class EleveController extends Controller
     public function update(Request $request, string $id)
     {
         try {
+            $eleve = Eleve::findOrFail($id);
+            $this->authorize('update', $eleve);
             $eleveUpdate = $this->eleveServices->update($request->all(), $id);
             return response()->json(['message' => 'Eleve mis à jour avec succès', 'eleve' => $eleveUpdate], 200);
         } catch (\Throwable $e) {
