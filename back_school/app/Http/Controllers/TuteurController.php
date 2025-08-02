@@ -72,4 +72,17 @@ class TuteurController extends Controller
         $results = $this->tuteurService->search($request->query('q'));
         return response()->json($results);
     }
+
+    public function count()
+    {
+        try {
+            $total = $this->tuteurService->countTuteurs();
+            return response()->json(['total' => $total], 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => 'Erreur lors du comptage',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

@@ -17,6 +17,7 @@ export class EleveService {
   ) {}
 
   private searchUrl = `${this.api_Url}/search`;
+  private countUrl = `${this.api_Url}/count`;
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({
@@ -53,13 +54,20 @@ export class EleveService {
       .pipe(catchError(this.handleError));
   }
 
-
   search(motcle: string) {
     const params = { motcle: motcle };
     return this.httpclient
       .get<Eleve[]>(this.searchUrl, {
         headers: this.getHeaders(),
         params: params,
+      })
+      .pipe(catchError(this.handleError));
+  }
+
+  count() {
+    return this.httpclient
+      .get<any>(this.countUrl, {
+        headers: this.getHeaders(),
       })
       .pipe(catchError(this.handleError));
   }

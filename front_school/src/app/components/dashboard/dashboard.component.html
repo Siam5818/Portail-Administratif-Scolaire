@@ -1,1 +1,100 @@
-<p>dashboard works!</p>
+<main class="p-6 bg-gray-100 min-h-screen">
+  <!-- Titre principal -->
+  <header class="flex justify-between items-center mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-800">
+        Tableau de bord administrateur
+      </h1>
+      <p class="text-gray-600 text-lg mt-1">{{ greeting }}, {{ adminName }}</p>
+    </div>
+  </header>
+
+  <!-- Statistiques -->
+  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+    <app-card-stat
+      title="Élèves inscrits"
+      [value]="stats.eleves"
+      icon="🎓"
+      color="blue"
+    ></app-card-stat>
+    <app-card-stat
+      title="Professeurs actifs"
+      [value]="stats.enseignants"
+      icon="🧑‍🏫"
+      color="green"
+    ></app-card-stat>
+    <app-card-stat
+      title="Familles connectées"
+      [value]="stats.tuteurs"
+      icon="👨‍👩‍👧"
+      color="purple"
+    ></app-card-stat>
+    <app-card-stat
+      title="Cours disponibles"
+      [value]="stats.cours"
+      icon="📘"
+      color="yellow"
+    ></app-card-stat>
+  </section>
+
+  <!-- Utilisateurs récents + Notifications -->
+  <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+    <div class="bg-white p-6 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">
+        Utilisateurs récents
+      </h2>
+      <app-utilisateur></app-utilisateur>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">
+        Notifications système
+      </h2>
+      <app-notification-list></app-notification-list>
+    </div>
+  </section>
+
+  <!-- Activité récente -->
+  <section class="bg-white p-6 rounded-lg shadow-md mb-10">
+    <h2 class="text-xl font-semibold text-gray-700 mb-4">Activité récente</h2>
+    <app-activity-feed></app-activity-feed>
+  </section>
+
+  <!-- Graphique d’évolution -->
+  <section class="bg-white p-6 rounded-lg shadow-md mb-10">
+    <h2 class="text-xl font-semibold text-gray-700 mb-4">
+      Évolution des inscriptions
+    </h2>
+    <app-stat-chart></app-stat-chart>
+  </section>
+
+  <!-- Gestion des classes -->
+  <section class="bg-white p-6 rounded-lg shadow-md mb-10">
+    <h2 class="text-xl font-semibold text-gray-700 mb-4">
+      Gestion des classes
+    </h2>
+    <app-classes></app-classes>
+  </section>
+
+  <!-- Gestion des matières -->
+  <section class="bg-white p-6 rounded-lg shadow-md mb-10">
+    <h2 class="text-xl font-semibold text-gray-700 mb-4">
+      Gestion des matières
+    </h2>
+    <app-matieres></app-matieres>
+  </section>
+
+  <!-- Gestion des notes -->
+  <section class="bg-white p-6 rounded-lg shadow-md mb-10">
+    <h2 class="text-xl font-semibold text-gray-700 mb-4">Gestion des notes</h2>
+    <app-notes></app-notes>
+  </section>
+
+  <!-- Gestion des bulletins -->
+  <section class="bg-white p-6 rounded-lg shadow-md mb-10">
+    <h2 class="text-xl font-semibold text-gray-700 mb-4">
+      Gestion des bulletins
+    </h2>
+    <app-bulletins></app-bulletins>
+  </section>
+</main>

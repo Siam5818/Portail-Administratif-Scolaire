@@ -23,7 +23,9 @@
       <a routerLink="/dashboard" class="hover:text-blue-600">Dashboard</a>
     </li>
     <li *ngIf="role === 'admin'">
-      <a routerLink="/gestion-utilisateurs" class="hover:text-blue-600">Utilisateurs</a>
+      <a routerLink="/gestion-utilisateurs" class="hover:text-blue-600"
+        >Utilisateurs</a
+      >
     </li>
     <li *ngIf="role === 'admin'">
       <a routerLink="/gestion-classes" class="hover:text-blue-600">Classes</a>
@@ -32,7 +34,9 @@
       <a routerLink="/gestion-matieres" class="hover:text-blue-600">Matières</a>
     </li>
     <li *ngIf="role === 'admin'">
-      <a routerLink="/bulletins" class="hover:text-blue-600">Notes & Bulletins</a>
+      <a routerLink="/bulletins" class="hover:text-blue-600"
+        >Notes & Bulletins</a
+      >
     </li>
 
     <!-- Enseignant -->
@@ -40,12 +44,16 @@
       <a routerLink="/mes-classes" class="hover:text-blue-600">Mes Classes</a>
     </li>
     <li *ngIf="role === 'enseignant'">
-      <a routerLink="/saisie-notes" class="hover:text-blue-600">Saisie des Notes</a>
+      <a routerLink="/saisie-notes" class="hover:text-blue-600"
+        >Saisie des Notes</a
+      >
     </li>
 
     <!-- Élève / Tuteur -->
     <li *ngIf="role === 'eleve' || role === 'tuteur'">
-      <a routerLink="/mes-bulletins" class="hover:text-blue-600">Mes Bulletins</a>
+      <a routerLink="/mes-bulletins" class="hover:text-blue-600"
+        >Mes Bulletins</a
+      >
     </li>
 
     <!-- Déconnexion -->

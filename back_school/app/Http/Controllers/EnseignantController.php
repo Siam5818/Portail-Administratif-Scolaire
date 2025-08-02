@@ -141,4 +141,17 @@ class EnseignantController extends Controller
             'error' => "Erreur lors de $action : " . $e->getMessage()
         ], 500);
     }
+
+    public function count()
+    {
+        try {
+            $total = $this->proService->countEnseignants();
+            return response()->json(['total' => $total], 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => 'Erreur lors du comptage',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

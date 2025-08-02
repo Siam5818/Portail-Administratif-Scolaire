@@ -44,4 +44,9 @@ class MatiereService
 
         return Matiere::whereRaw('LOWER(nom) LIKE ?', ["%$motCle%"])->get();
     }
+
+    public function countMatiere(): int
+    {
+        return Matiere::count();
+    }
 }

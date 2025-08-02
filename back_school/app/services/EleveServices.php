@@ -161,4 +161,9 @@ class EleveServices
                 ->orWhereRaw('LOWER(email) LIKE ?', ["%$motCle%"]);
         })->get();
     }
+
+    public function countEleves(): int
+    {
+        return Eleve::count();
+    }
 }

@@ -110,4 +110,9 @@ class EnseignantService
                 ->orWhereRaw('LOWER(email) LIKE ?', ["%$motCle%"]);
         })->with('user')->get();
     }
+
+    public function countEnseignants(): int
+    {
+        return Enseignant::count();
+    }
 }

@@ -47,11 +47,11 @@ class EleveController extends Controller
 
             // Envoi des notifications de bienvenue
             $this->notificationService->envoyerNotificationsCreationEleve(
-                $eleve, 
-                $defaultPasswordEleve, 
+                $eleve,
+                $defaultPasswordEleve,
                 $result['tuteurPassword'] ?? null
             );
-            
+
             logger($result);
 
             return response()->json(['message' => 'Eleve créé avec succès', 'eleve' => $result], 201);
@@ -114,6 +114,19 @@ class EleveController extends Controller
             return response()->json($eleves, 200);
         } catch (\Throwable $e) {
             return response()->json(['message' => 'Erreur lors de la recherche.', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function count()
+    {
+        try {
+            $total = $this->eleveServices->countEleves();
+            return response()->json(['total' => $total], 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => 'Erreur lors du comptage',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 }

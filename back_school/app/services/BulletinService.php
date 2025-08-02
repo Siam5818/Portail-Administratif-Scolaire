@@ -151,5 +151,4 @@ class BulletinService
 
         return $query->with('eleve')->get();
     }
-
 }

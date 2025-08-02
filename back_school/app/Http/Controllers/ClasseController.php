@@ -130,4 +130,17 @@ class ClasseController extends Controller
             return response()->json(['message' => 'Erreur lors de la recherche.', 'error' => $e->getMessage()], 500);
         }
     }
+
+    public function count()
+    {
+        try {
+            $total = $this->classeService->countClasses();
+            return response()->json(['total' => $total], 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => 'Erreur lors du comptage',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

@@ -12,10 +12,10 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { LoginComponent } from './components/login/login.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
-import { DashprofComponent } from './components/dashprof/dashprof.component';
-import { DashfamilleComponent } from './components/dashfamille/dashfamille.component';
+import { DashboardModule } from './components/dashboard/dashboard.module';
+import { DashfamilleModule } from './components/dashfamille/dashfamille.module';
+import { DashprofModule } from './components/dashprof/dashprof.module';
 
 @NgModule({
   declarations: [
@@ -24,10 +24,7 @@ import { DashfamilleComponent } from './components/dashfamille/dashfamille.compo
     FooterComponent,
     LoginComponent,
     PageNotFoundComponent,
-    DashboardComponent,
     ChangePasswordComponent,
-    DashprofComponent,
-    DashfamilleComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,6 +32,9 @@ import { DashfamilleComponent } from './components/dashfamille/dashfamille.compo
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
+    DashboardModule,
+    DashfamilleModule,
+    DashprofModule,
   ],
   providers: [provideClientHydration()],
   bootstrap: [AppComponent],

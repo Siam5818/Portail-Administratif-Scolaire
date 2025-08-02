@@ -112,6 +112,19 @@ class MatiereController extends Controller
         }
     }
 
+    public function count()
+    {
+        try {
+            $total = $this->matiereService->countMatiere();
+            return response()->json(['total' => $total], 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => 'Erreur lors du comptage',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     /**
      * Handle JSON error responses.
      *

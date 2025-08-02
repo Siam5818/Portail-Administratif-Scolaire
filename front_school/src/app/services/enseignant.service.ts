@@ -77,4 +77,12 @@ export class EnseignantService {
       })
       .pipe(catchError(this.handleError));
   }
+
+  count() {
+    return this.httpclient
+      .get<{ total: number }>(`${this.api_Url}/count`, {
+        headers: this.getHeaders(),
+      })
+      .pipe(catchError(this.handleError));
+  }
 }

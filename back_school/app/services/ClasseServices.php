@@ -47,4 +47,9 @@ class ClasseServices
                 ->orWhereRaw('LOWER(niveau) LIKE ?', ["%$motCle%"]);
         })->get();
     }
+
+    public function countClasses(): int
+    {
+        return Classe::count();
+    }
 }
