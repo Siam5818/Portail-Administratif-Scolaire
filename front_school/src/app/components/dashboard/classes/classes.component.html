@@ -1,1 +1,27 @@
-<p>classes works!</p>
+<ul class="space-y-4">
+  <li
+    *ngFor="let activity of data"
+    class="flex items-start gap-3 border-b pb-2"
+  >
+    <i [class]="activity.icon + ' text-' + activity.color + '-500 text-lg'"></i>
+    <div>
+      <p class="text-gray-800 font-medium">{{ activity.message }}</p>
+
+      <!-- Affichage conditionnel de la note -->
+      <p
+        *ngIf="activity.type === 'note'"
+        class="text-sm text-green-600 font-semibold"
+      >
+        Valeur : {{ activity.details.note }}
+      </p>
+
+      <p class="text-sm text-gray-500">
+        {{ activity.timestamp | date : "short" }}
+      </p>
+    </div>
+  </li>
+</ul>
+
+<p *ngIf="data.length === 0" class="text-gray-500 italic">
+  Aucune activité récente.
+</p>

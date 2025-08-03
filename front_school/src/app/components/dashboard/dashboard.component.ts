@@ -4,6 +4,7 @@ import { EleveService } from '../../services/eleve.service';
 import { EnseignantService } from '../../services/enseignant.service';
 import { MatiereService } from '../../services/matiere.service';
 import { TuteurService } from '../../services/tuteur.service';
+import { ClasseService } from '../../services/classe.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,18 +21,24 @@ export class DashboardComponent {
     cours: 0,
   };
 
+  recentUtilisateurs: any[] = [];
+  recentActivites: any[] = [];
+  meilleureMoyenne: any = null;
+
   constructor(
     private authService: AuthService,
     private eleveService: EleveService,
     private enseignantService: EnseignantService,
     private tuteurService: TuteurService,
-    private matiereService: MatiereService
+    private matiereService: MatiereService,
+    private classeService: ClasseService
   ) {}
 
   ngOnInit(): void {
     this.setAdminName();
     this.setGreeting();
     this.loadStats();
+    this.loadRecents();
   }
 
   setAdminName(): void {
@@ -63,5 +70,22 @@ export class DashboardComponent {
     this.matiereService
       .count()
       .subscribe((res) => (this.stats.cours = res.total));
+  }
+
+  loadRecents(): void {
+    this.authService.getUtilisateursRecents().subscribe({
+      next: (res) => (this.recentUtilisateurs = res),
+      error: (err) => console.error('Erreur utilisateurs récents', err),
+    });
+
+    this.classeService.getActivitesRecents().subscribe({
+      next: (res) => (this.recentActivites = res),
+      error: (err) => console.error('Erreur activités récentes', err),
+    });
+
+    this.classeService.getMeilleureMoyenne().subscribe({
+      next: (res) => (this.meilleureMoyenne = res),
+      error: (err) => console.error('Erreur meilleure moyenne', err),
+    });
   }
 }

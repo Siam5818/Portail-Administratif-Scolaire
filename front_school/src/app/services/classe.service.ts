@@ -85,4 +85,16 @@ export class ClasseService {
       })
       .pipe(catchError(this.handleError));
   }
+
+  getActivitesRecents() {
+    return this.httpclient.get<any[]>(`http://127.0.0.1:8000/api/v1/classes/recents/activites`, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  getMeilleureMoyenne() {
+    return this.httpclient.get<any[]>(`http://127.0.0.1:8000/api/v1/classes/meilleur/moyenne`, {
+      headers: this.getHeaders(),
+    });
+  }
 }

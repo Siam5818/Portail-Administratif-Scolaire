@@ -34,6 +34,32 @@ class ClasseController extends Controller
         }
     }
 
+    public function recents()
+    {
+        try {
+            return response()->json($this->classeService->getRecentActivities());
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Erreur lors de la récupération des activités récentes.',
+                'error' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+    public function meilleureMoyenne()
+    {
+        try {
+            return response()->json($this->classeService->getMeilleureMoyenne());
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Impossible de récupérer la meilleure moyenne du semestre.',
+                'error' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+
+
     /**
      * Store a newly created resource in storage.
      */

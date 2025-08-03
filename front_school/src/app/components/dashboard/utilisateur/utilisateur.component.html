@@ -1,1 +1,12 @@
-<p>utilisateur works!</p>
+<ul class="space-y-3">
+  <li *ngFor="let user of data" class="flex items-center justify-between">
+    <div>
+      <p class="text-gray-800 font-medium">{{ user.nom }} {{ user.prenom }}</p>
+      <p class="text-sm text-gray-500">{{ user.role }}</p>
+    </div>
+    <span class="text-xs text-gray-400">{{
+      user.created_at | date : "short"
+    }}</span>
+  </li>
+</ul>
+<p *ngIf="data.length === 0" class="text-gray-500">Aucun utilisateur récent.</p>

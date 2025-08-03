@@ -8,93 +8,112 @@
       <p class="text-gray-600 text-lg mt-1">{{ greeting }}, {{ adminName }}</p>
     </div>
   </header>
+  <div class="bg-gray-50 min-h-screen p-6">
+    <!-- Statistiques -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+      <app-card-stat
+        title="Élèves inscrits"
+        [value]="stats.eleves"
+        icon="fas fa-user-graduate"
+        color="blue"
+      ></app-card-stat>
 
-  <!-- Statistiques -->
-  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-    <app-card-stat
-      title="Élèves inscrits"
-      [value]="stats.eleves"
-      icon="🎓"
-      color="blue"
-    ></app-card-stat>
-    <app-card-stat
-      title="Professeurs actifs"
-      [value]="stats.enseignants"
-      icon="🧑‍🏫"
-      color="green"
-    ></app-card-stat>
-    <app-card-stat
-      title="Familles connectées"
-      [value]="stats.tuteurs"
-      icon="👨‍👩‍👧"
-      color="purple"
-    ></app-card-stat>
-    <app-card-stat
-      title="Cours disponibles"
-      [value]="stats.cours"
-      icon="📘"
-      color="yellow"
-    ></app-card-stat>
-  </section>
+      <app-card-stat
+        title="Professeurs actifs"
+        [value]="stats.enseignants"
+        icon="fas fa-chalkboard-teacher"
+        color="green"
+      ></app-card-stat>
 
-  <!-- Utilisateurs récents + Notifications -->
-  <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
-    <div class="bg-white p-6 rounded-lg shadow-md">
+      <app-card-stat
+        title="Familles connectées"
+        [value]="stats.tuteurs"
+        icon="fas fa-users"
+        color="purple"
+      ></app-card-stat>
+
+      <app-card-stat
+        title="Cours disponibles"
+        [value]="stats.cours"
+        icon="fas fa-book"
+        color="yellow"
+      ></app-card-stat>
+    </section>
+
+    <!-- Utilisateurs récents + Activites -->
+    <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-10">
+      <!-- Utilisateurs récents -->
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2
+          class="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2"
+        >
+          <i class="fas fa-users text-blue-500"></i>
+          Les utilisateurs récents
+        </h2>
+        <app-utilisateur [data]="recentUtilisateurs"></app-utilisateur>
+      </div>
+
+      <!-- Activités récentes -->
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2
+          class="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2"
+        >
+          <i class="fas fa-tasks text-purple-500"></i>
+          Les activités récentes
+        </h2>
+        <app-classes [data]="recentActivites"></app-classes>
+      </div>
+
+      <!-- Meilleure moyenne -->
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2
+          class="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2"
+        >
+          <i class="fas fa-chart-line text-green-500"></i>
+          La meilleure moyenne
+        </h2>
+        <app-notes [data]="meilleureMoyenne"></app-notes>
+      </div>
+    </section>
+
+    <!-- Graphique d’évolution -->
+    <section class="bg-white p-6 rounded-lg shadow-md mb-10">
       <h2 class="text-xl font-semibold text-gray-700 mb-4">
-        Utilisateurs récents
+        Évolution des inscriptions
       </h2>
-      <app-utilisateur></app-utilisateur>
-    </div>
+      <app-stat-chart></app-stat-chart>
+    </section>
 
-    <div class="bg-white p-6 rounded-lg shadow-md">
+    <!-- Gestion des classes -->
+    <section class="bg-white p-6 rounded-lg shadow-md mb-10">
       <h2 class="text-xl font-semibold text-gray-700 mb-4">
-        Notifications système
+        Gestion des classes
       </h2>
-      <app-notification-list></app-notification-list>
-    </div>
-  </section>
+      <app-classes></app-classes>
+    </section>
 
-  <!-- Activité récente -->
-  <section class="bg-white p-6 rounded-lg shadow-md mb-10">
-    <h2 class="text-xl font-semibold text-gray-700 mb-4">Activité récente</h2>
-    <app-activity-feed></app-activity-feed>
-  </section>
+    <!-- Gestion des matières -->
+    <section class="bg-white p-6 rounded-lg shadow-md mb-10">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">
+        Gestion des matières
+      </h2>
+      <app-matieres></app-matieres>
+    </section>
 
-  <!-- Graphique d’évolution -->
-  <section class="bg-white p-6 rounded-lg shadow-md mb-10">
-    <h2 class="text-xl font-semibold text-gray-700 mb-4">
-      Évolution des inscriptions
-    </h2>
-    <app-stat-chart></app-stat-chart>
-  </section>
+    <!-- Gestion des notes -->
+    <section class="bg-white p-6 rounded-lg shadow-md mb-10">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">
+        Gestion des notes
+      </h2>
+      <app-notes></app-notes>
+    </section>
 
-  <!-- Gestion des classes -->
-  <section class="bg-white p-6 rounded-lg shadow-md mb-10">
-    <h2 class="text-xl font-semibold text-gray-700 mb-4">
-      Gestion des classes
-    </h2>
-    <app-classes></app-classes>
-  </section>
-
-  <!-- Gestion des matières -->
-  <section class="bg-white p-6 rounded-lg shadow-md mb-10">
-    <h2 class="text-xl font-semibold text-gray-700 mb-4">
-      Gestion des matières
-    </h2>
-    <app-matieres></app-matieres>
-  </section>
-
-  <!-- Gestion des notes -->
-  <section class="bg-white p-6 rounded-lg shadow-md mb-10">
-    <h2 class="text-xl font-semibold text-gray-700 mb-4">Gestion des notes</h2>
-    <app-notes></app-notes>
-  </section>
-
-  <!-- Gestion des bulletins -->
-  <section class="bg-white p-6 rounded-lg shadow-md mb-10">
-    <h2 class="text-xl font-semibold text-gray-700 mb-4">
-      Gestion des bulletins
-    </h2>
-    <app-bulletins></app-bulletins>
-  </section>
+    <!-- Gestion des bulletins -->
+    <section class="bg-white p-6 rounded-lg shadow-md mb-10">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">
+        Gestion des bulletins
+      </h2>
+      <app-bulletins></app-bulletins>
+    </section>
+  </div>
 </main>

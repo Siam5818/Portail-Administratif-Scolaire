@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-card-stat',
@@ -6,8 +6,9 @@ import { Component, Input } from '@angular/core';
   styleUrl: './card-stat.component.css',
 })
 export class CardStatComponent {
-  @Input() title: string = '';
-  @Input() value: string | number = '';
-  @Input() icon: string = '';
-  @Input() color: string = 'gray';
+  @Input() title!: string;
+  @Input() value!: number;
+  @Input() icon!: string;
+  @Input() color!: string;
+
 }

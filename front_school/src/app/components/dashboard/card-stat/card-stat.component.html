@@ -1,12 +1,17 @@
-<div
-  class="bg-white shadow rounded-lg p-5 flex items-center justify-between border-t-4"
-  [ngClass]="'border-' + color + '-500'"
->
+<div class="flex items-center justify-between">
   <div>
-    <p class="text-sm text-gray-500">{{ title }}</p>
-    <h2 class="text-2xl font-bold text-gray-800">{{ value }}</h2>
+    <h3 class="text-lg font-semibold">{{ title }}</h3>
+    <p class="text-2xl font-bold">{{ value }}</p>
   </div>
-  <div class="text-3xl">
-    {{ icon }}
+  <div
+    class="text-white text-3xl p-3 rounded-full"
+    [ngClass]="{
+      'bg-blue-500': color === 'blue',
+      'bg-green-500': color === 'green',
+      'bg-purple-500': color === 'purple',
+      'bg-yellow-500': color === 'yellow'
+    }"
+  >
+    <i [ngClass]="icon"></i>
   </div>
 </div>

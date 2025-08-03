@@ -85,4 +85,10 @@ export class AuthService {
         return null;
     }
   }
+
+  getUtilisateursRecents() {
+    return this.httpclient.get<any[]>(`${this.api_Url}/recents/utilisateurs`, {
+      headers: this.getAuthorizationHeaders(),
+    });
+  }
 }

@@ -1,1 +1,36 @@
-<p>notes works!</p>
+<div
+  *ngIf="data?.status !== 'empty'; else noData"
+  class="text-center space-y-3"
+>
+  <!-- Avatar dynamique basé sur le nom -->
+  <div class="flex justify-center">
+    <div
+      class="w-20 h-20 rounded-full bg-gradient-to-br from-green-200 to-green-400 flex items-center justify-center text-white text-3xl font-bold shadow"
+    >
+      {{ data?.eleve?.nom?.[0] || '?' }}
+    </div>
+  </div>
+
+  <!-- Moyenne -->
+  <p class="text-2xl font-bold text-green-600">{{ data?.moyenne || '0' }} / 20</p>
+
+  <!-- Nom complet -->
+  <p class="text-gray-700 text-lg">
+    {{ data?.eleve?.nom || 'Nom' }} {{ data?.eleve?.prenom || 'Prénom' }}
+  </p>
+
+  <!-- Classe -->
+  <p class="text-sm text-gray-500">Classe : {{ data?.eleve?.classe || 'Non définie' }}</p>
+
+  <!-- Période -->
+  <p class="text-sm text-gray-400 italic">
+    Période : {{ data?.periode_complete || 'Non définie' }}
+  </p>
+</div>
+
+<!-- Cas où il n'y a pas de données -->
+<ng-template #noData>
+  <div class="text-center text-gray-500 italic">
+    {{ data?.message || "Aucune moyenne disponible." }}
+  </div>
+</ng-template>

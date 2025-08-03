@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\AuthService;
+
 use Illuminate\Http\Request;
+use App\Services\AuthService;
 use Illuminate\Support\Facades\Auth;
-use App\Notifications\EleveWelcomeNotification;
-use App\Notifications\TuteurWelcomeNotification;
 
 class AuthController extends Controller
 {
@@ -16,6 +15,19 @@ class AuthController extends Controller
     {
         $this->authService = $authService;
     }
+
+    public function recents()
+    {
+        try {
+            return response()->json($this->authService->getUtilisateursRecents());
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Erreur lors de la récupération des utilisateurs récentes.',
+                'error' => $th->getMessage()
+            ], 500);
+        }
+    }
+
     /**
      * Authentification utilisateur + token Sanctum
      */
