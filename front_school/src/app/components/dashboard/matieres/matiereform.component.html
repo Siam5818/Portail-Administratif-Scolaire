@@ -1,0 +1,184 @@
+<div class="max-w-6xl mx-auto">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">
+      {{ textButtonVOUp }} une matière
+    </h1>
+    <button
+      type="button"
+      (click)="onCancel()"
+      class="px-4 py-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-50 transition"
+    >
+      <i class="fas fa-arrow-left mr-2"></i>Retour
+    </button>
+  </div>
+
+  <!-- Form -->
+  <form [formGroup]="matiereForm" (ngSubmit)="onSubmit()" class="space-y-6">
+    <div class="bg-white p-6 rounded-lg shadow-sm border">
+      <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+        <i class="fas fa-book mr-3 text-indigo-600"></i>
+        Détails de la matière
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Nom -->
+        <div>
+          <label for="nom" class="block text-sm font-medium text-gray-700 mb-1"
+            >Nom</label
+          >
+          <input
+            id="nom"
+            formControlName="nom"
+            placeholder="Ex: Mathématiques"
+            class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            [class.border-red-500]="
+              tbErreurFront['nom'].invalid && tbErreurFront['nom'].touched
+            "
+          />
+          <div
+            *ngIf="tbErreurFront['nom'].invalid && tbErreurFront['nom'].touched"
+            class="text-red-500 text-sm mt-1"
+          >
+            Le nom est requis
+          </div>
+        </div>
+
+        <!-- Coefficient -->
+        <div>
+          <label
+            for="coefficient"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Coefficient</label
+          >
+          <input
+            id="coefficient"
+            formControlName="coefficient"
+            type="number"
+            min="1"
+            max="20"
+            placeholder="Ex: 4"
+            class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            [class.border-red-500]="
+              tbErreurFront['coefficient'].invalid &&
+              tbErreurFront['coefficient'].touched
+            "
+          />
+          <div
+            *ngIf="
+              tbErreurFront['coefficient'].invalid &&
+              tbErreurFront['coefficient'].touched
+            "
+            class="text-red-500 text-sm mt-1"
+          >
+            <span *ngIf="tbErreurFront['coefficient'].errors?.['required']"
+              >Le coefficient est requis</span
+            >
+            <span *ngIf="tbErreurFront['coefficient'].errors?.['min']"
+              >Minimum : 1</span
+            >
+            <span *ngIf="tbErreurFront['coefficient'].errors?.['max']"
+              >Maximum : 20</span
+            >
+          </div>
+        </div>
+
+        <!-- Classe -->
+        <div>
+          <label
+            for="classe_id"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Classe</label
+          >
+          <select
+            id="classe_id"
+            formControlName="classe_id"
+            class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            [class.border-red-500]="
+              tbErreurFront['classe_id'].invalid &&
+              tbErreurFront['classe_id'].touched
+            "
+          >
+            <option value="" disabled selected>Choisir une classe</option>
+            <option *ngFor="let classe of classes" [value]="classe.id">
+              {{ classe.libelle }} ({{ classe.niveau }})
+            </option>
+          </select>
+          <div
+            *ngIf="
+              tbErreurFront['classe_id'].invalid &&
+              tbErreurFront['classe_id'].touched
+            "
+            class="text-red-500 text-sm mt-1"
+          >
+            La classe est requise
+          </div>
+        </div>
+
+        <!-- Enseignant -->
+        <div>
+          <label
+            for="enseignant_id"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Enseignant</label
+          >
+          <select
+            id="enseignant_id"
+            formControlName="enseignant_id"
+            class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            [class.border-red-500]="
+              tbErreurFront['enseignant_id'].invalid &&
+              tbErreurFront['enseignant_id'].touched
+            "
+          >
+            <option value="" disabled selected>Choisir un enseignant</option>
+            <option
+              *ngFor="let enseignant of enseignants"
+              [value]="enseignant.id"
+            >
+              {{ enseignant.user.nom }} {{ enseignant.user.prenom }} -
+              {{ enseignant.specialite }}
+            </option>
+          </select>
+          <div
+            *ngIf="
+              tbErreurFront['enseignant_id'].invalid &&
+              tbErreurFront['enseignant_id'].touched
+            "
+            class="text-red-500 text-sm mt-1"
+          >
+            L'enseignant est requis
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="flex justify-center pt-6">
+      <button
+        type="submit"
+        [disabled]="matiereForm.invalid"
+        class="px-8 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed font-medium"
+      >
+        <i class="fas fa-save mr-2"></i>
+        {{ textButtonVOUp }} la matière
+      </button>
+    </div>
+
+    <!-- Messages -->
+    <div
+      *ngIf="successMessage"
+      class="text-green-600 mt-4 text-center p-3 bg-green-50 rounded-lg"
+    >
+      <i class="fas fa-check-circle mr-2"></i>
+      {{ successMessage }}
+    </div>
+    <div
+      *ngIf="errorMessage"
+      class="text-red-600 mt-4 text-center p-3 bg-red-50 rounded-lg"
+    >
+      <i class="fas fa-exclamation-circle mr-2"></i>
+      {{ errorMessage }}
+    </div>
+  </form>
+</div>

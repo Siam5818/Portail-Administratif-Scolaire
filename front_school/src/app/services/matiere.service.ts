@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { catchError, throwError } from 'rxjs';
 import { Matiere } from '../models/matiere';
+import { MatiereFormPayload } from '../models/matiere-from-playload';
 
 @Injectable({
   providedIn: 'root',
@@ -34,7 +35,7 @@ export class MatiereService {
 
   getMatieres() {
     return this.httpclient
-      .get<Matiere[]>(this.api_Url, {
+      .get<MatiereFormPayload[]>(this.api_Url, {
         headers: this.getHeaders(),
       })
       .pipe(catchError(this.handleError));
@@ -42,7 +43,7 @@ export class MatiereService {
 
   getMatiereById(id: number) {
     return this.httpclient
-      .get<Matiere>(this.api_Url + '/' + id, {
+      .get<MatiereFormPayload>(this.api_Url + '/' + id, {
         headers: this.getHeaders(),
       })
       .pipe(catchError(this.handleError));
@@ -75,7 +76,7 @@ export class MatiereService {
   search(motcle: string) {
     const params = new HttpParams().set('query', motcle);
     return this.httpclient
-      .get<Matiere[]>(this.searchUrl, {
+      .get<MatiereFormPayload[]>(this.searchUrl, {
         headers: this.getHeaders(),
         params: params,
       })

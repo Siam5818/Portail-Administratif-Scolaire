@@ -10,6 +10,9 @@ import { NgChartsModule } from 'ng2-charts';
 import { UtilisateurModule } from './utilisateur/utilisateur.module';
 import { SuiviScolaireModule } from './suivi-scolaire/suivi-scolaire.module';
 import { UserComponent } from './user/user.component';
+import { MatiereFormComponent } from './matieres/matiereform.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -17,6 +20,7 @@ import { UserComponent } from './user/user.component';
     StatChartComponent,
     ClassesComponent,
     MatieresComponent,
+    MatiereFormComponent,
     NotesComponent,
     CardStatComponent,
     UserComponent,
@@ -27,6 +31,9 @@ import { UserComponent } from './user/user.component';
     UtilisateurModule,
     SuiviScolaireModule,
     UtilisateurModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
 })
 export class DashboardModule {}

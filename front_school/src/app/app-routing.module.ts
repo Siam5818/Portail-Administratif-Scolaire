@@ -17,6 +17,7 @@ import { NotesPageComponent } from './components/dashboard/suivi-scolaire/notes-
 import { SuiviScolaireComponent } from './components/dashboard/suivi-scolaire/suivi-scolaire.component';
 import { EleveFormComponent } from './components/dashboard/utilisateur/eleve/eleveform.component';
 import { EnseignantFormComponent } from './components/dashboard/utilisateur/enseignant/enseignantform.component';
+import { MatiereFormComponent } from './components/dashboard/matieres/matiereform.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -76,6 +77,16 @@ const routes: Routes = [
   {
     path: 'gestion-matieres',
     component: MatieresComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'ajouter-matiere',
+    component: MatiereFormComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'modifier-matiere/:id',
+    component: MatiereFormComponent,
     canActivate: [authGuard],
   },
 
