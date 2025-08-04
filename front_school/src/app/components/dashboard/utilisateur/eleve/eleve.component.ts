@@ -17,7 +17,7 @@ export class EleveComponent implements OnInit {
   searchTerm = '';
 
   constructor(
-    private eleveService: EleveService, 
+    private eleveService: EleveService,
     private router: Router,
     private authService: AuthService
   ) {}

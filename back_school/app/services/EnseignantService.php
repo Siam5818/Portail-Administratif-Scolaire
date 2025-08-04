@@ -11,7 +11,7 @@ class EnseignantService
 {
     public function index()
     {
-        return Enseignant::with('user')->get();
+        return Enseignant::with('user', 'classe')->get();
     }
 
     public function store(array $data): array
@@ -48,7 +48,7 @@ class EnseignantService
 
     public function show($id)
     {
-        return Enseignant::with('user')->find($id);
+        return Enseignant::with('user', 'classe')->find($id);
     }
 
     public function update(array $request, $id)

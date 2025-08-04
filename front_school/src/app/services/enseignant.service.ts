@@ -1,8 +1,9 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { catchError, throwError } from 'rxjs';
 import { Enseignant } from '../models/enseignant';
+import { EnseignantFormPayload } from '../models/enseignant-form-payload';
 
 @Injectable({
   providedIn: 'root',
@@ -48,17 +49,17 @@ export class EnseignantService {
       .pipe(catchError(this.handleError));
   }
 
-  addEnseignant(enseignant: Enseignant) {
+  addEnseignant(enseignant: EnseignantFormPayload) {
     return this.httpclient
-      .post<Enseignant>(this.api_Url, enseignant, {
+      .post<EnseignantFormPayload>(this.api_Url, enseignant, {
         headers: this.getHeaders(),
       })
       .pipe(catchError(this.handleError));
   }
 
-  updateEnseignant(enseignant: Enseignant) {
+  updateEnseignant(enseignant: EnseignantFormPayload) {
     return this.httpclient
-      .put<Enseignant>(this.api_Url + '/' + enseignant.id, enseignant, {
+      .put<EnseignantFormPayload>(this.api_Url + '/' + enseignant.id, enseignant, {
         headers: this.getHeaders(),
       })
       .pipe(catchError(this.handleError));
@@ -73,7 +74,7 @@ export class EnseignantService {
   }
 
   search(motcle: string) {
-    const params = { motcle: motcle };
+    const params = new HttpParams().set('query', motcle);
     return this.httpclient
       .get<Enseignant[]>(this.searchUrl, {
         headers: this.getHeaders(),

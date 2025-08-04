@@ -155,11 +155,13 @@ class EleveServices
 
         $motCle = strtolower($query);
 
-        return Eleve::where(function ($q) use ($motCle) {
-            $q->whereRaw('LOWER(nom) LIKE ?', ["%$motCle%"])
-                ->orWhereRaw('LOWER(prenom) LIKE ?', ["%$motCle%"])
-                ->orWhereRaw('LOWER(email) LIKE ?', ["%$motCle%"]);
-        })->get();
+        return Eleve::with(['user', 'classe', 'tuteur'])
+            ->whereHas('user', function ($q) use ($motCle) {
+                $q->whereRaw('LOWER(nom) LIKE ?', ["%{$motCle}%"])
+                    ->orWhereRaw('LOWER(prenom) LIKE ?', ["%{$motCle}%"])
+                    ->orWhereRaw('LOWER(email) LIKE ?', ["%{$motCle}%"]);
+            })
+            ->get();
     }
 
     public function countEleves(): int

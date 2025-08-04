@@ -1,1 +1,193 @@
-<p>enseignant works!</p>
+<div class="max-w-6xl mx-auto">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">
+      {{ textButtonVOUp }} un enseignant
+    </h1>
+    <button
+      type="button"
+      (click)="onCancel()"
+      class="px-4 py-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-50 transition"
+    >
+      <i class="fas fa-arrow-left mr-2"></i>Retour
+    </button>
+  </div>
+
+  <form [formGroup]="enseignantForm" (ngSubmit)="onSubmit()" class="space-y-6">
+    <div class="bg-white p-6 rounded-lg shadow-sm border">
+      <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+        <i class="fas fa-chalkboard-teacher mr-3 text-blue-600"></i>
+        Informations de l'enseignant
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Nom -->
+        <div>
+          <label for="nom" class="block text-sm font-medium text-gray-700 mb-1"
+            >Nom</label
+          >
+          <input
+            id="nom"
+            formControlName="nom"
+            placeholder="Nom"
+            class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            [class.border-red-500]="
+              tbErreurFront['nom'].invalid && tbErreurFront['nom'].touched
+            "
+          />
+          <div
+            *ngIf="tbErreurFront['nom'].invalid && tbErreurFront['nom'].touched"
+            class="text-red-500 text-sm mt-1"
+          >
+            Le nom est requis (min. 2 caractères)
+          </div>
+        </div>
+
+        <!-- Prénom -->
+        <div>
+          <label
+            for="prenom"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Prénom</label
+          >
+          <input
+            id="prenom"
+            formControlName="prenom"
+            placeholder="Prénom"
+            class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            [class.border-red-500]="
+              tbErreurFront['prenom'].invalid && tbErreurFront['prenom'].touched
+            "
+          />
+          <div
+            *ngIf="
+              tbErreurFront['prenom'].invalid && tbErreurFront['prenom'].touched
+            "
+            class="text-red-500 text-sm mt-1"
+          >
+            Le prénom est requis (min. 2 caractères)
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label
+            for="email"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Email</label
+          >
+          <input
+            id="email"
+            formControlName="email"
+            placeholder="Email"
+            type="email"
+            class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            [class.border-red-500]="
+              tbErreurFront['email'].invalid && tbErreurFront['email'].touched
+            "
+          />
+          <div
+            *ngIf="
+              tbErreurFront['email'].invalid && tbErreurFront['email'].touched
+            "
+            class="text-red-500 text-sm mt-1"
+          >
+            <span *ngIf="tbErreurFront['email'].errors?.['required']"
+              >L'email est requis</span
+            >
+            <span *ngIf="tbErreurFront['email'].errors?.['email']"
+              >Format d'email invalide</span
+            >
+          </div>
+        </div>
+
+        <!-- Spécialité -->
+        <div>
+          <label
+            for="specialite"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Spécialité</label
+          >
+          <input
+            id="specialite"
+            formControlName="specialite"
+            placeholder="Spécialité"
+            class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            [class.border-red-500]="
+              tbErreurFront['specialite'].invalid &&
+              tbErreurFront['specialite'].touched
+            "
+          />
+          <div
+            *ngIf="
+              tbErreurFront['specialite'].invalid &&
+              tbErreurFront['specialite'].touched
+            "
+            class="text-red-500 text-sm mt-1"
+          >
+            La spécialité est requise
+          </div>
+        </div>
+
+        <!-- Classe -->
+        <div class="md:col-span-2">
+          <label
+            for="classe_id"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Classe</label
+          >
+          <select
+            id="classe_id"
+            formControlName="classe_id"
+            class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            [class.border-red-500]="
+              tbErreurFront['classe_id'].invalid &&
+              tbErreurFront['classe_id'].touched
+            "
+          >
+            <option value="" disabled selected>Choisir une classe</option>
+            <option *ngFor="let classe of classes" [value]="classe.id">
+              {{ classe.libelle }} ({{ classe.niveau }})
+            </option>
+          </select>
+          <div
+            *ngIf="
+              tbErreurFront['classe_id'].invalid &&
+              tbErreurFront['classe_id'].touched
+            "
+            class="text-red-500 text-sm mt-1"
+          >
+            La classe est requise
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bouton de soumission -->
+    <div class="flex justify-center pt-6">
+      <button
+        type="submit"
+        [disabled]="enseignantForm.invalid"
+        class="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed font-medium"
+      >
+        <i class="fas fa-save mr-2"></i>
+        {{ textButtonVOUp }} l'enseignant
+      </button>
+    </div>
+
+    <!-- Messages -->
+    <div
+      *ngIf="successMessage"
+      class="text-green-600 mt-4 text-center p-3 bg-green-50 rounded-lg"
+    >
+      <i class="fas fa-check-circle mr-2"></i>
+      {{ successMessage }}
+    </div>
+    <div
+      *ngIf="errorMessage"
+      class="text-red-600 mt-4 text-center p-3 bg-red-50 rounded-lg"
+    >
+      <i class="fas fa-exclamation-circle mr-2"></i>
+      {{ errorMessage }}
+    </div>
+  </form>
+</div>

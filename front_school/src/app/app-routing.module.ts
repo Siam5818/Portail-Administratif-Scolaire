@@ -16,6 +16,7 @@ import { BulletinsPageComponent } from './components/dashboard/suivi-scolaire/bu
 import { NotesPageComponent } from './components/dashboard/suivi-scolaire/notes-page/notes-page.component';
 import { SuiviScolaireComponent } from './components/dashboard/suivi-scolaire/suivi-scolaire.component';
 import { EleveFormComponent } from './components/dashboard/utilisateur/eleve/eleveform.component';
+import { EnseignantFormComponent } from './components/dashboard/utilisateur/enseignant/enseignantform.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -34,25 +35,36 @@ const routes: Routes = [
     canActivate: [authGuard],
   },
 
-  { 
-    path: 'gestion-utilisateurs/eleves', 
+  {
+    path: 'gestion-utilisateurs/eleves',
     component: EleveComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
-  { 
-    path: 'gestion-utilisateurs/ajouter-eleve', 
+  {
+    path: 'gestion-utilisateurs/ajouter-eleve',
     component: EleveFormComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
-  { 
-    path: 'gestion-utilisateurs/modifier-eleve/:id', 
+  {
+    path: 'gestion-utilisateurs/modifier-eleve/:id',
     component: EleveFormComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
-  { 
-    path: 'gestion-utilisateurs/enseignants', 
+  //-------
+  {
+    path: 'gestion-utilisateurs/enseignants',
     component: EnseignantComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+  },
+  {
+    path: 'gestion-utilisateurs/ajouter-enseignant',
+    component: EnseignantFormComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'gestion-utilisateurs/modifier-enseignant/:id',
+    component: EnseignantFormComponent,
+    canActivate: [authGuard],
   },
 
   {

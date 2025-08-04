@@ -6,6 +6,7 @@ import { UtilisateurComponent } from './utilisateur.component';
 import { EleveFormComponent } from './eleve/eleveform.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EnseignantFormComponent } from './enseignant/enseignantform.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     EnseignantComponent,
     EleveComponent,
     EleveFormComponent,
+    EnseignantFormComponent,
   ],
   imports: [CommonModule, RouterModule, ReactiveFormsModule, FormsModule],
   exports: [UtilisateurComponent],
