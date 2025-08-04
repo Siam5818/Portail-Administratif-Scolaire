@@ -23,9 +23,13 @@ export class ClasseService {
   }
 
   private getHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      Authorization: 'Bearer ' + this.authservice.getToken(),
-    });
+    const token = this.authservice.getToken();
+    if (token) {
+      return new HttpHeaders({
+        Authorization: 'Bearer ' + token,
+      });
+    }
+    return new HttpHeaders();
   }
 
   getClasses() {
@@ -67,6 +71,8 @@ export class ClasseService {
       })
       .pipe(catchError(this.handleError));
   }
+
+  
 
   search(motcle: string) {
     const params = new HttpParams().set('query', motcle);

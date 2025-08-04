@@ -7,6 +7,15 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
 import { authGuard } from './guards/auth.guard';
 import { DashprofComponent } from './components/dashprof/dashprof.component';
 import { DashfamilleComponent } from './components/dashfamille/dashfamille.component';
+import { UtilisateurComponent } from './components/dashboard/utilisateur/utilisateur.component';
+import { EleveComponent } from './components/dashboard/utilisateur/eleve/eleve.component';
+import { EnseignantComponent } from './components/dashboard/utilisateur/enseignant/enseignant.component';
+import { ClassesComponent } from './components/dashboard/classes/classes.component';
+import { MatieresComponent } from './components/dashboard/matieres/matieres.component';
+import { BulletinsPageComponent } from './components/dashboard/suivi-scolaire/bulletins-page/bulletins-page.component';
+import { NotesPageComponent } from './components/dashboard/suivi-scolaire/notes-page/notes-page.component';
+import { SuiviScolaireComponent } from './components/dashboard/suivi-scolaire/suivi-scolaire.component';
+import { EleveFormComponent } from './components/dashboard/utilisateur/eleve/eleveform.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -23,6 +32,49 @@ const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
     canActivate: [authGuard],
+  },
+
+  { 
+    path: 'gestion-utilisateurs/eleves', 
+    component: EleveComponent,
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'gestion-utilisateurs/ajouter-eleve', 
+    component: EleveFormComponent,
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'gestion-utilisateurs/modifier-eleve/:id', 
+    component: EleveFormComponent,
+    canActivate: [authGuard]
+  },
+  { 
+    path: 'gestion-utilisateurs/enseignants', 
+    component: EnseignantComponent,
+    canActivate: [authGuard]
+  },
+
+  {
+    path: 'gestion-classes',
+    component: ClassesComponent,
+    canActivate: [authGuard],
+  },
+
+  {
+    path: 'gestion-matieres',
+    component: MatieresComponent,
+    canActivate: [authGuard],
+  },
+
+  {
+    path: 'suivi-scolaire',
+    component: SuiviScolaireComponent,
+    canActivate: [authGuard],
+    children: [
+      { path: 'notes', component: NotesPageComponent },
+      { path: 'bulletins', component: BulletinsPageComponent },
+    ],
   },
   // Espace enseignant
   {

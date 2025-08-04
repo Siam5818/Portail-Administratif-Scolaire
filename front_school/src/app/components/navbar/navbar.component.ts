@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 export class NavbarComponent {
   role: string = '';
   isMenuOpen: boolean = false;
+  activeDropdown: string | null = null;
 
   constructor(private authservice: AuthService, private router: Router) {
     // Vérification du rôle de l'utilisateur à la création du composant
@@ -17,6 +18,16 @@ export class NavbarComponent {
     if (user) {
       this.role = user.role;
     }
+  }
+
+  toggleDropdown(name: string): void {
+    this.activeDropdown = this.activeDropdown === name ? null : name;
+  }
+
+  navigateAndClose(path: string): void {
+    this.activeDropdown = null;
+    this.isMenuOpen = false;
+    this.router.navigateByUrl(path);
   }
 
   // Méthode pour basculer l'état du menu

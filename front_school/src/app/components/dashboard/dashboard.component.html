@@ -43,18 +43,18 @@
     <!-- Utilisateurs récents + Activites -->
     <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-10">
       <!-- Utilisateurs récents -->
-      <div class="bg-white p-6 rounded-lg shadow-md">
+      <div class="bg-white p-6 rounded-lg shadow-md h-[400px] overflow-y-auto">
         <h2
           class="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2"
         >
           <i class="fas fa-users text-blue-500"></i>
           Les utilisateurs récents
         </h2>
-        <app-utilisateur [data]="recentUtilisateurs"></app-utilisateur>
+        <app-user [data]="recentUtilisateurs"></app-user>
       </div>
 
       <!-- Activités récentes -->
-      <div class="bg-white p-6 rounded-lg shadow-md">
+      <div class="bg-white p-6 rounded-lg shadow-md h-[400px] overflow-y-auto">
         <h2
           class="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2"
         >
@@ -65,7 +65,7 @@
       </div>
 
       <!-- Meilleure moyenne -->
-      <div class="bg-white p-6 rounded-lg shadow-md">
+      <div class="bg-white p-6 rounded-lg shadow-md h-[400px] overflow-y-auto">
         <h2
           class="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2"
         >
@@ -82,38 +82,6 @@
         Évolution des inscriptions
       </h2>
       <app-stat-chart></app-stat-chart>
-    </section>
-
-    <!-- Gestion des classes -->
-    <section class="bg-white p-6 rounded-lg shadow-md mb-10">
-      <h2 class="text-xl font-semibold text-gray-700 mb-4">
-        Gestion des classes
-      </h2>
-      <app-classes></app-classes>
-    </section>
-
-    <!-- Gestion des matières -->
-    <section class="bg-white p-6 rounded-lg shadow-md mb-10">
-      <h2 class="text-xl font-semibold text-gray-700 mb-4">
-        Gestion des matières
-      </h2>
-      <app-matieres></app-matieres>
-    </section>
-
-    <!-- Gestion des notes -->
-    <section class="bg-white p-6 rounded-lg shadow-md mb-10">
-      <h2 class="text-xl font-semibold text-gray-700 mb-4">
-        Gestion des notes
-      </h2>
-      <app-notes></app-notes>
-    </section>
-
-    <!-- Gestion des bulletins -->
-    <section class="bg-white p-6 rounded-lg shadow-md mb-10">
-      <h2 class="text-xl font-semibold text-gray-700 mb-4">
-        Gestion des bulletins
-      </h2>
-      <app-bulletins></app-bulletins>
     </section>
   </div>
 </main>

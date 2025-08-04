@@ -23,9 +23,13 @@ export class MatiereService {
   }
 
   private getHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      Authorization: 'Bearer ' + this.authservice.getToken(),
-    });
+    const token = this.authservice.getToken();
+    if (token) {
+      return new HttpHeaders({
+        Authorization: 'Bearer ' + token,
+      });
+    }
+    return new HttpHeaders();
   }
 
   getMatieres() {

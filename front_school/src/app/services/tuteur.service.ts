@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
+import { AuthService } from './auth.service';
 import { Tuteur } from '../models/tuteur';
 import { UpdateTuteurResponse } from '../models/update-tuteur-response';
 
@@ -10,7 +11,10 @@ import { UpdateTuteurResponse } from '../models/update-tuteur-response';
 export class TuteurService {
   private api_Url = 'http://127.0.0.1:8000/api/v1/tuteurs';
 
-  constructor(private httpclient: HttpClient) {}
+  constructor(
+    private httpclient: HttpClient,
+    private authService: AuthService
+  ) {}
 
   private searchUrl = `${this.api_Url}/search`;
 
@@ -20,9 +24,13 @@ export class TuteurService {
   }
 
   private getHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      Authorization: 'Bearer ' + localStorage.getItem('token'),
-    });
+    const token = this.authService.getToken();
+    if (token) {
+      return new HttpHeaders({
+        Authorization: 'Bearer ' + token,
+      });
+    }
+    return new HttpHeaders();
   }
 
   getTuteurs() {

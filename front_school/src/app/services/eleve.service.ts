@@ -1,9 +1,10 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Eleve } from '../models/eleve';
 import { EleveFormPayload } from '../models/eleve-form-payload';
+import { EleveResponse } from '../models/eleve-response';
 
 @Injectable({
   providedIn: 'root',
@@ -20,9 +21,13 @@ export class EleveService {
   private countUrl = `${this.api_Url}/count`;
 
   private getHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      Authorization: 'Bearer ' + this.authservice.getToken(),
-    });
+    const token = this.authservice.getToken();
+    if (token) {
+      return new HttpHeaders({
+        Authorization: 'Bearer ' + token,
+      });
+    }
+    return new HttpHeaders();
   }
 
   private handleError(error: any) {
@@ -40,7 +45,7 @@ export class EleveService {
 
   getEleveById(id: number) {
     return this.httpclient
-      .get<Eleve>(this.api_Url + '/' + id, {
+      .get<EleveResponse>(this.api_Url + '/' + id, {
         headers: this.getHeaders(),
       })
       .pipe(catchError(this.handleError));
@@ -54,8 +59,22 @@ export class EleveService {
       .pipe(catchError(this.handleError));
   }
 
-  search(motcle: string) {
-    const params = { motcle: motcle };
+  updateEleve(eleve: EleveFormPayload) {
+    return this.httpclient
+      .put<EleveFormPayload>(this.api_Url + '/' + eleve.id, eleve, {
+        headers: this.getHeaders(),
+      })
+      .pipe(catchError(this.handleError));
+  }
+
+  deleteEleve(id: number) {
+    return this.httpclient
+      .delete(this.api_Url + '/' + id, { headers: this.getHeaders() })
+      .pipe(catchError(this.handleError));
+  }
+
+  searchEleve(motcle: string) {
+    const params = new HttpParams().set('query', motcle);
     return this.httpclient
       .get<Eleve[]>(this.searchUrl, {
         headers: this.getHeaders(),

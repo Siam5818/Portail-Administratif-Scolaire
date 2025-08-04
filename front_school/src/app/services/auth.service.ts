@@ -14,9 +14,12 @@ export class AuthService {
 
   getAuthorizationHeaders(): HttpHeaders {
     const token = this.getToken();
-    return new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
+    if (token) {
+      return new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+      });
+    }
+    return new HttpHeaders();
   }
 
   login(data: Login) {
@@ -40,11 +43,16 @@ export class AuthService {
   }
 
   saveToken(token: string) {
-    localStorage.setItem('token', token);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('token', token);
+    }
   }
 
   getToken() {
-    return localStorage.getItem('token');
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('token');
+    }
+    return null;
   }
 
   isLoggedIn(): boolean {
@@ -52,21 +60,27 @@ export class AuthService {
   }
 
   clearToken() {
-    localStorage.removeItem('token');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+    }
   }
 
   saveUser(user: User): void {
-    localStorage.setItem('user', JSON.stringify(user));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('user', JSON.stringify(user));
+    }
   }
 
   clearUser(): void {
-    localStorage.removeItem('user');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('user');
+    }
   }
 
   getCurrentUser(): any {
     if (typeof window !== 'undefined') {
       const user = localStorage.getItem('user');
-      console.log('Utilisateur récupéré :', user);
+      //console.log('Utilisateur récupéré :', user);
       return user ? JSON.parse(user) : null;
     }
     return null;

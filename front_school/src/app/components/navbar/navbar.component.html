@@ -26,11 +26,41 @@
         <i class="fas fa-tachometer-alt mr-1"></i> Dashboard
       </a>
     </li>
-    <li *ngIf="role === 'admin'">
-      <a routerLink="/gestion-utilisateurs" class="hover:text-blue-600">
+
+    <!-- Menu Utilisateur -->
+    <li *ngIf="role === 'admin'" class="relative">
+      <button
+        (click)="toggleDropdown('users')"
+        class="flex items-center hover:text-blue-600"
+      >
         <i class="fas fa-users mr-1"></i> Utilisateurs
-      </a>
+        <i class="fas fa-chevron-down ml-1 text-xs"></i>
+      </button>
+
+      <ul
+        *ngIf="activeDropdown === 'users'"
+        class="absolute left-0 mt-2 w-48 bg-white border rounded shadow-lg z-10"
+      >
+        <li>
+          <a
+            (click)="navigateAndClose('/gestion-utilisateurs/eleves')"
+            class="block px-4 py-2 hover:bg-blue-100 text-gray-700"
+          >
+            <i class="fas fa-user-graduate mr-2"></i> Élèves
+          </a>
+        </li>
+        <li>
+          <a
+            (click)="navigateAndClose('/gestion-utilisateurs/enseignants')"
+            class="block px-4 py-2 hover:bg-blue-100 text-gray-700"
+          >
+            <i class="fas fa-chalkboard-teacher mr-2"></i> Enseignants
+          </a>
+        </li>
+      </ul>
     </li>
+
+    <!-- Menu Classes-->
     <li *ngIf="role === 'admin'">
       <a routerLink="/gestion-classes" class="hover:text-blue-600">
         <i class="fas fa-chalkboard mr-1"></i> Classes
@@ -41,10 +71,37 @@
         <i class="fas fa-book-open mr-1"></i> Matières
       </a>
     </li>
-    <li *ngIf="role === 'admin'">
-      <a routerLink="/bulletins" class="hover:text-blue-600">
+
+    <li *ngIf="role === 'admin'" class="relative">
+      <button
+        (click)="toggleDropdown('notes')"
+        class="flex items-center hover:text-blue-600"
+      >
         <i class="fas fa-file-alt mr-1"></i> Notes & Bulletins
-      </a>
+        <i class="fas fa-chevron-down ml-1 text-xs"></i>
+      </button>
+
+      <ul
+        *ngIf="activeDropdown === 'notes'"
+        class="absolute left-0 mt-2 w-48 bg-white border rounded shadow-lg z-10"
+      >
+        <li>
+          <a
+            (click)="navigateAndClose('/suivi-scolaire/notes')"
+            class="block px-4 py-2 hover:bg-blue-100 text-gray-700"
+          >
+            <i class="fas fa-clipboard-list mr-2"></i> Notes
+          </a>
+        </li>
+        <li>
+          <a
+            (click)="navigateAndClose('/suivi-scolaire/bulletins')"
+            class="block px-4 py-2 hover:bg-blue-100 text-gray-700"
+          >
+            <i class="fas fa-file-invoice mr-2"></i> Bulletins
+          </a>
+        </li>
+      </ul>
     </li>
 
     <!-- Enseignant -->

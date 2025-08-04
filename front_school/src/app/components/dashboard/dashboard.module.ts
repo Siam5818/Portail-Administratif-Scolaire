@@ -1,29 +1,32 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivityFeedComponent } from './activity-feed/activity-feed.component';
-import { NotificationListComponent } from './notification-list/notification-list.component';
 import { StatChartComponent } from './stat-chart/stat-chart.component';
 import { DashboardComponent } from './dashboard.component';
-import { UtilisateurComponent } from './utilisateur/utilisateur.component';
 import { ClassesComponent } from './classes/classes.component';
 import { MatieresComponent } from './matieres/matieres.component';
 import { NotesComponent } from './notes/notes.component';
-import { BulletinsComponent } from './bulletins/bulletins.component';
 import { CardStatComponent } from './card-stat/card-stat.component';
+import { NgChartsModule } from 'ng2-charts';
+import { UtilisateurModule } from './utilisateur/utilisateur.module';
+import { SuiviScolaireModule } from './suivi-scolaire/suivi-scolaire.module';
+import { UserComponent } from './user/user.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
-    NotificationListComponent,
-    ActivityFeedComponent,
     StatChartComponent,
-    UtilisateurComponent,
     ClassesComponent,
     MatieresComponent,
     NotesComponent,
-    BulletinsComponent,
     CardStatComponent,
+    UserComponent,
   ],
-  imports: [CommonModule],
+  imports: [
+    NgChartsModule,
+    CommonModule,
+    UtilisateurModule,
+    SuiviScolaireModule,
+    UtilisateurModule,
+  ],
 })
 export class DashboardModule {}

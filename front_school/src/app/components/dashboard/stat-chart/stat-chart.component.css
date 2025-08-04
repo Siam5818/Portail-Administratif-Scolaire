@@ -1,0 +1,13 @@
+.chart-container {
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.2em;
+  color: #888;
+  padding: 40px;
+}

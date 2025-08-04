@@ -1,4 +1,5 @@
 export class EleveFormPayload {
+  id!: number;
   nom!: string;
   prenom!: string;
   email!: string;

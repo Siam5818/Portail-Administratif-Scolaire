@@ -4,8 +4,8 @@ import { User } from './user';
 
 export class Eleve {
   id!: number;
-  date_naissance!: String;
-  document_justificatif!: String | null;
+  date_naissance!: string;
+  document_justificatif!: string | null;
   user!: User;
   classe!: Classe;
   tuteur!: Tuteur;

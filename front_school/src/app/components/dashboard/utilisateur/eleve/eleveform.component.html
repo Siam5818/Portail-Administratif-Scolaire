@@ -1,0 +1,217 @@
+<div class="max-w-6xl mx-auto">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">{{ textButtonVOUp }} un élève</h1>
+    <button
+      type="button"
+      (click)="onCancel()"
+      class="px-4 py-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-50 transition"
+    >
+      <i class="fas fa-arrow-left mr-2"></i>Retour
+    </button>
+  </div>
+
+  <form
+    [formGroup]="eleveForm"
+    (ngSubmit)="onSubmit()"
+    class="space-y-6"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Colonne gauche : Informations de l'élève -->
+      <div class="bg-white p-6 rounded-lg shadow-sm border">
+        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+          <i class="fas fa-user-graduate mr-3 text-blue-600"></i>
+          Informations de l'élève
+        </h2>
+
+        <div class="space-y-4">
+          <!-- Nom -->
+          <div>
+            <label for="nom" class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+            <input
+              id="nom"
+              formControlName="nom"
+              placeholder="Nom de l'élève"
+              class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              [class.border-red-500]="tbErreurFront['nom'].invalid && tbErreurFront['nom'].touched"
+            />
+            <div *ngIf="tbErreurFront['nom'].invalid && tbErreurFront['nom'].touched" class="text-red-500 text-sm mt-1">
+              Le nom est requis
+            </div>
+          </div>
+
+          <!-- Prénom -->
+          <div>
+            <label for="prenom" class="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
+            <input
+              id="prenom"
+              formControlName="prenom"
+              placeholder="Prénom de l'élève"
+              class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              [class.border-red-500]="tbErreurFront['prenom'].invalid && tbErreurFront['prenom'].touched"
+            />
+            <div *ngIf="tbErreurFront['prenom'].invalid && tbErreurFront['prenom'].touched" class="text-red-500 text-sm mt-1">
+              Le prénom est requis
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input
+              id="email"
+              formControlName="email"
+              placeholder="Email de l'élève"
+              class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              [class.border-red-500]="tbErreurFront['email'].invalid && tbErreurFront['email'].touched"
+            />
+            <div *ngIf="tbErreurFront['email'].invalid && tbErreurFront['email'].touched" class="text-red-500 text-sm mt-1">
+              <span *ngIf="tbErreurFront['email'].errors?.['required']">L'email est requis</span>
+              <span *ngIf="tbErreurFront['email'].errors?.['email']">Format d'email invalide</span>
+            </div>
+          </div>
+
+          <!-- Date de naissance -->
+          <div>
+            <label for="date_naissance" class="block text-sm font-medium text-gray-700 mb-1">Date de naissance</label>
+            <input
+              id="date_naissance"
+              formControlName="date_naissance"
+              type="date"
+              class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              [class.border-red-500]="tbErreurFront['date_naissance'].invalid && tbErreurFront['date_naissance'].touched"
+            />
+            <div *ngIf="tbErreurFront['date_naissance'].invalid && tbErreurFront['date_naissance'].touched" class="text-red-500 text-sm mt-1">
+              <span *ngIf="tbErreurFront['date_naissance'].errors?.['required']">La date de naissance est requise</span>
+              <span *ngIf="tbErreurFront['date_naissance'].errors?.['pastDate']">La date doit être dans le passé</span>
+            </div>
+          </div>
+
+          <!-- Classe -->
+          <div>
+            <label for="classe_id" class="block text-sm font-medium text-gray-700 mb-1">Classe</label>
+            <select
+              id="classe_id"
+              formControlName="classe_id"
+              class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              [class.border-red-500]="tbErreurFront['classe_id'].invalid && tbErreurFront['classe_id'].touched"
+            >
+              <option value="" disabled selected>Choisir une classe</option>
+              <option *ngFor="let classe of classes" [value]="classe.id">
+                {{ classe.libelle }} ({{ classe.niveau }})
+              </option>
+            </select>
+            <div *ngIf="tbErreurFront['classe_id'].invalid && tbErreurFront['classe_id'].touched" class="text-red-500 text-sm mt-1">
+              La classe est requise
+            </div>
+          </div>
+
+          <!-- Document justificatif -->
+          <div>
+            <label for="document_justificatif" class="block text-sm font-medium text-gray-700 mb-1">Document justificatif</label>
+            <input
+              id="document_justificatif"
+              formControlName="document_justificatif"
+              placeholder="Nom du document"
+              class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Colonne droite : Informations du tuteur -->
+      <div class="bg-white p-6 rounded-lg shadow-sm border">
+        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+          <i class="fas fa-user-tie mr-3 text-green-600"></i>
+          Informations du tuteur
+        </h2>
+
+        <div formGroupName="tuteur" class="space-y-4">
+          <div>
+            <label for="tuteur_nom" class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+            <input
+              id="tuteur_nom"
+              formControlName="nom"
+              placeholder="Nom du tuteur"
+              class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              [class.border-red-500]="eleveForm.get('tuteur.nom')?.invalid && eleveForm.get('tuteur.nom')?.touched"
+            />
+            <div *ngIf="eleveForm.get('tuteur.nom')?.invalid && eleveForm.get('tuteur.nom')?.touched" class="text-red-500 text-sm mt-1">
+              Le nom du tuteur est requis
+            </div>
+          </div>
+
+          <div>
+            <label for="tuteur_prenom" class="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
+            <input
+              id="tuteur_prenom"
+              formControlName="prenom"
+              placeholder="Prénom du tuteur"
+              class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              [class.border-red-500]="eleveForm.get('tuteur.prenom')?.invalid && eleveForm.get('tuteur.prenom')?.touched"
+            />
+            <div *ngIf="eleveForm.get('tuteur.prenom')?.invalid && eleveForm.get('tuteur.prenom')?.touched" class="text-red-500 text-sm mt-1">
+              Le prénom du tuteur est requis
+            </div>
+          </div>
+
+          <div>
+            <label for="tuteur_email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input
+              id="tuteur_email"
+              formControlName="email"
+              placeholder="Email du tuteur"
+              class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              [class.border-red-500]="eleveForm.get('tuteur.email')?.invalid && eleveForm.get('tuteur.email')?.touched"
+            />
+            <div *ngIf="eleveForm.get('tuteur.email')?.invalid && eleveForm.get('tuteur.email')?.touched" class="text-red-500 text-sm mt-1">
+              <span *ngIf="eleveForm.get('tuteur.email')?.errors?.['required']">L'email du tuteur est requis</span>
+              <span *ngIf="eleveForm.get('tuteur.email')?.errors?.['email']">Format d'email invalide</span>
+            </div>
+          </div>
+
+          <div>
+            <label for="tuteur_profession" class="block text-sm font-medium text-gray-700 mb-1">Profession</label>
+            <input
+              id="tuteur_profession"
+              formControlName="profession"
+              placeholder="Profession"
+              class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-green-500 focus:border-green-500"
+            />
+          </div>
+
+          <div>
+            <label for="tuteur_telephone" class="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+            <input
+              id="tuteur_telephone"
+              formControlName="telephone"
+              placeholder="Téléphone"
+              class="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-green-500 focus:border-green-500"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bouton de soumission en bas -->
+    <div class="flex justify-center pt-6">
+      <button
+        type="submit"
+        [disabled]="eleveForm.invalid"
+        class="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed font-medium"
+      >
+        <i class="fas fa-save mr-2"></i>
+        {{ textButtonVOUp }} l'élève
+      </button>
+    </div>
+
+    <!-- Messages de succès/erreur -->
+    <div *ngIf="successMessage" class="text-green-600 mt-4 text-center p-3 bg-green-50 rounded-lg">
+      <i class="fas fa-check-circle mr-2"></i>
+      {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage" class="text-red-600 mt-4 text-center p-3 bg-red-50 rounded-lg">
+      <i class="fas fa-exclamation-circle mr-2"></i>
+      {{ errorMessage }}
+    </div>
+  </form>
+</div>

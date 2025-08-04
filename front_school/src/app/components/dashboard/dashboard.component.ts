@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { EleveService } from '../../services/eleve.service';
 import { EnseignantService } from '../../services/enseignant.service';
@@ -11,7 +11,7 @@ import { ClasseService } from '../../services/classe.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   greeting: string = '';
   adminName: string = '';
   stats = {

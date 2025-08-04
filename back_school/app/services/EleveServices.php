@@ -21,7 +21,7 @@ class EleveServices
 
     public function index()
     {
-        return Eleve::with(['user', 'classe', 'tuteur'])->get();
+        return Eleve::with(['user', 'classe', 'tuteur.user'])->get();
     }
 
     public function store(array $request)
@@ -70,7 +70,7 @@ class EleveServices
 
     public function show($id)
     {
-        return Eleve::with(['user', 'classe', 'tuteur'])->findOrFail($id);
+        return Eleve::with(['user', 'classe', 'tuteur.user'])->findOrFail($id);
     }
 
     public function update(array $request, $id)
