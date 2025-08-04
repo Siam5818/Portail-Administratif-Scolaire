@@ -77,9 +77,12 @@ export class NoteService {
     matiere_id?: number;
     periode?: string;
   }) {
+    const params = new HttpParams({ fromObject: filters });
+
     return this.httpclient
-      .post<Note[]>(this.searchUrl, filters, {
+      .get<Note[]>(this.searchUrl, {
         headers: this.getHeaders(),
+        params,
       })
       .pipe(catchError(this.handleError));
   }

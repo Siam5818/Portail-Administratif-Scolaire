@@ -11,7 +11,16 @@ class ClasseServices
 {
     public function index()
     {
-        return Classe::all();
+        return Classe::with(['eleves', 'matieres'])->get()->map(function ($classe) {
+            return [
+                'id' => $classe->id,
+                'libelle' => $classe->libelle,
+                'niveau' => $classe->niveau,
+                'effectif' => $classe->eleves->count(),
+                'nombre_matieres' => $classe->matieres->count(),
+                'created_at' => $classe->created_at->toDateTimeString()
+            ];
+        });
     }
 
     public function store(array $request)
@@ -21,8 +30,18 @@ class ClasseServices
 
     public function show($id)
     {
-        return Classe::find($id);
+        $classe = Classe::with(['eleves', 'matieres'])->findOrFail($id);
+
+        return [
+            'id' => $classe->id,
+            'libelle' => $classe->libelle,
+            'niveau' => $classe->niveau,
+            'effectif' => $classe->eleves->count(),
+            'nombre_matieres' => $classe->matieres->count(),
+            'created_at' => $classe->created_at->toDateTimeString()
+        ];
     }
+
 
     public function update(array $request, $id)
     {

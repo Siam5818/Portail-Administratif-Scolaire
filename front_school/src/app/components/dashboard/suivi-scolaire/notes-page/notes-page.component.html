@@ -1,1 +1,102 @@
-<p>notes-page works!</p>
+<div class="p-6 bg-white shadow rounded">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-semibold text-gray-800">Gestion des notes</h2>
+    <a
+      [routerLink]="['/suivi-scolaire/ajouter-note']"
+      class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition flex items-center"
+    >
+      <i class="fas fa-plus mr-2"></i> Ajouter une note
+    </a>
+  </div>
+
+  <!-- Filtres -->
+  <div class="flex items-center gap-2 mb-4">
+    <input
+      [(ngModel)]="filters.eleve_id"
+      type="number"
+      placeholder="ID Élève"
+      class="px-3 py-2 border rounded w-full md:w-1/4"
+    />
+    <input
+      [(ngModel)]="filters.matiere_id"
+      type="number"
+      placeholder="ID Matière"
+      class="px-3 py-2 border rounded w-full md:w-1/4"
+    />
+    <input
+      [(ngModel)]="filters.periode"
+      type="text"
+      placeholder="Période"
+      class="px-3 py-2 border rounded w-full md:w-1/4"
+    />
+    <button
+      (click)="searchNotes()"
+      class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 flex items-center"
+    >
+      <i class="fas fa-search mr-2"></i> Rechercher
+    </button>
+    <button
+      (click)="resetFilters()"
+      class="px-4 py-2 bg-red-100 text-red-600 rounded hover:bg-red-200 flex items-center"
+    >
+      <i class="fas fa-undo mr-2"></i> Réinitialiser
+    </button>
+  </div>
+
+  <!-- Messages -->
+  <div *ngIf="errorMessage" class="text-red-600 mb-4">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="loading" class="text-gray-500 mb-4">
+    <i class="fas fa-spinner fa-spin mr-2"></i> Chargement des notes...
+  </div>
+
+  <!-- Tableau -->
+  <table
+    class="w-full border-collapse"
+    *ngIf="!loading && notes.length"
+  >
+    <thead>
+      <tr class="bg-gray-100 text-left">
+        <th class="border px-4 py-2">Élève</th>
+        <th class="border px-4 py-2">Matière</th>
+        <th class="border px-4 py-2">Note</th>
+        <th class="border px-4 py-2">Période</th>
+        <th class="border px-4 py-2">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let note of notes" class="hover:bg-gray-50">
+        <td class="border px-4 py-2">
+          {{ note.eleve.user.prenom }} {{ note.eleve.user.nom }}
+        </td>
+        <td class="border px-4 py-2">{{ note.matiere.nom }}</td>
+        <td class="border px-4 py-2">{{ note.note }}</td>
+        <td class="border px-4 py-2">{{ note.periode }}</td>
+        <td class="border px-4 py-2 space-x-2">
+          <button
+            [routerLink]="['/suivi-scolaire/modifier-note', note.id]"
+            class="text-green-600 hover:text-green-800"
+            title="Modifier"
+          >
+            <i class="fas fa-edit mr-1"></i>
+          </button>
+          <button
+            (click)="deleteNote(note.id)"
+            class="text-red-600 hover:text-red-800"
+            title="Supprimer"
+          >
+            <i class="fas fa-trash-alt mr-1"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Aucun résultat -->
+  <div *ngIf="!loading && !notes.length" class="mt-4 text-center text-gray-500">
+    <i class="fas fa-info-circle mr-2"></i> Aucune note trouvée.
+  </div>
+</div>

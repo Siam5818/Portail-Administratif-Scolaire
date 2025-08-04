@@ -22,4 +22,14 @@ class Classe extends Model
     {
         return $this->hasMany(Matiere::class);
     }
+
+    public function getEffectifAttribute(): int
+    {
+        return $this->eleves()->count();
+    }
+
+    public function getNombreMatieresAttribute(): int
+    {
+        return $this->matieres()->count();
+    }
 }

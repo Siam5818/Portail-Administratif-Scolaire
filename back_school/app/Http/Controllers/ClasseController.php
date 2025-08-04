@@ -30,7 +30,7 @@ class ClasseController extends Controller
             $classes = $this->classeService->index();
             return response()->json($classes, 200);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to retrieve classes', 'error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Erreur lors de la récupération des classes.', 'error' => $e->getMessage()], 500);
         }
     }
 

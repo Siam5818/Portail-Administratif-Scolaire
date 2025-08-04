@@ -18,6 +18,7 @@ import { EleveFormComponent } from './components/dashboard/utilisateur/eleve/ele
 import { EnseignantFormComponent } from './components/dashboard/utilisateur/enseignant/enseignantform.component';
 import { MatiereFormComponent } from './components/dashboard/matieres/matiereform.component';
 import { ClasseFormComponent } from './components/dashboard/classes/classeform.component';
+import { NotesFormComponent } from './components/dashboard/suivi-scolaire/notes-page/notefrom.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -99,15 +100,26 @@ const routes: Routes = [
     component: MatiereFormComponent,
     canActivate: [authGuard],
   },
-
+  //---------------
   {
-    path: 'suivi-scolaire',
-    component: SuiviScolaireComponent,
+    path: 'suivi-scolaire/notes',
+    component: NotesPageComponent,
     canActivate: [authGuard],
-    children: [
-      { path: 'notes', component: NotesPageComponent },
-      { path: 'bulletins', component: BulletinsPageComponent },
-    ],
+  },
+  {
+    path: 'suivi-scolaire/ajouter-note',
+    component: NotesFormComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'suivi-scolaire/modifier-note/:id',
+    component: NotesFormComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'suivi-scolaire/bulletins',
+    component: BulletinsPageComponent,
+    canActivate: [authGuard],
   },
   // Espace enseignant
   {

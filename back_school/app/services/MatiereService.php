@@ -8,7 +8,7 @@ class MatiereService
 {
     public function index()
     {
-        return Matiere::with(['enseignant', 'classe'])->get();
+        return Matiere::with(['enseignant.user', 'classe'])->get();
     }
 
     public function store(array $request)
@@ -18,7 +18,7 @@ class MatiereService
 
     public function show($id)
     {
-        return Matiere::with(['enseignant', 'classe'])->findOrFail($id);
+        return Matiere::with(['enseignant.user', 'classe'])->findOrFail($id);
     }
 
     public function update(array $request, $id)
