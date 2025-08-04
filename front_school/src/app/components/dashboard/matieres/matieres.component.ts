@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatiereFormPayload } from '../../../models/matiere-from-playload';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { MatiereService } from '../../../services/matiere.service';
 import { AuthService } from '../../../services/auth.service';
 

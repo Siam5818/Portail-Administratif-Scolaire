@@ -13,6 +13,8 @@ import { UserComponent } from './user/user.component';
 import { MatiereFormComponent } from './matieres/matiereform.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { ClasseFormComponent } from './classes/classeform.component';
+import { ActiviteRecenteComponent } from './activite-recente/activite-recente.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import { RouterModule } from '@angular/router';
     NotesComponent,
     CardStatComponent,
     UserComponent,
+    ClasseFormComponent,
+    ActiviteRecenteComponent,
   ],
   imports: [
     NgChartsModule,

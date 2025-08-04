@@ -7,7 +7,6 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
 import { authGuard } from './guards/auth.guard';
 import { DashprofComponent } from './components/dashprof/dashprof.component';
 import { DashfamilleComponent } from './components/dashfamille/dashfamille.component';
-import { UtilisateurComponent } from './components/dashboard/utilisateur/utilisateur.component';
 import { EleveComponent } from './components/dashboard/utilisateur/eleve/eleve.component';
 import { EnseignantComponent } from './components/dashboard/utilisateur/enseignant/enseignant.component';
 import { ClassesComponent } from './components/dashboard/classes/classes.component';
@@ -18,6 +17,7 @@ import { SuiviScolaireComponent } from './components/dashboard/suivi-scolaire/su
 import { EleveFormComponent } from './components/dashboard/utilisateur/eleve/eleveform.component';
 import { EnseignantFormComponent } from './components/dashboard/utilisateur/enseignant/enseignantform.component';
 import { MatiereFormComponent } from './components/dashboard/matieres/matiereform.component';
+import { ClasseFormComponent } from './components/dashboard/classes/classeform.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -67,10 +67,20 @@ const routes: Routes = [
     component: EnseignantFormComponent,
     canActivate: [authGuard],
   },
-
+  //---------------
   {
     path: 'gestion-classes',
     component: ClassesComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'ajouter-classe',
+    component: ClasseFormComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'modifier-classe/:id',
+    component: ClasseFormComponent,
     canActivate: [authGuard],
   },
 

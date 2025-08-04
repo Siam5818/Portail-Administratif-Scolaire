@@ -72,8 +72,6 @@ export class ClasseService {
       .pipe(catchError(this.handleError));
   }
 
-  
-
   search(motcle: string) {
     const params = new HttpParams().set('query', motcle);
     return this.httpclient
@@ -93,14 +91,20 @@ export class ClasseService {
   }
 
   getActivitesRecents() {
-    return this.httpclient.get<any[]>(`http://127.0.0.1:8000/api/v1/classes/recents/activites`, {
-      headers: this.getHeaders(),
-    });
+    return this.httpclient.get<any[]>(
+      `http://127.0.0.1:8000/api/v1/classes/recents/activites`,
+      {
+        headers: this.getHeaders(),
+      }
+    );
   }
 
   getMeilleureMoyenne() {
-    return this.httpclient.get<any[]>(`http://127.0.0.1:8000/api/v1/classes/meilleur/moyenne`, {
-      headers: this.getHeaders(),
-    });
+    return this.httpclient.get<any[]>(
+      `http://127.0.0.1:8000/api/v1/classes/meilleur/moyenne`,
+      {
+        headers: this.getHeaders(),
+      }
+    );
   }
 }
