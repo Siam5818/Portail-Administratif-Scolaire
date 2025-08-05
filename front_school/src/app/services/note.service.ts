@@ -1,14 +1,16 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, throwError } from 'rxjs';
+import { catchError, map, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Note } from '../models/note';
+import { Matiere } from '../models/matiere';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NoteService {
   private api_Url = 'http://127.0.0.1:8000/api/v1/notes';
+  private eleveApiUrl = 'http://127.0.0.1:8000/api/v1/eleves';
 
   constructor(
     private httpclient: HttpClient,
@@ -89,5 +91,19 @@ export class NoteService {
 
   getNotesByEleveId(eleveId: number) {
     return this.search({ eleve_id: eleveId });
+  }
+
+  getMatieresByEleveId(eleveId: number) {
+    const url = `${this.eleveApiUrl}/${eleveId}/matieres`;
+
+    return this.httpclient
+      .get<any>(url, {
+        headers: this.getHeaders(),
+      })
+      .pipe(
+        catchError(this.handleError),
+        // Extraire le tableau de matières
+        map((response) => response.original as Matiere[])
+      );
   }
 }

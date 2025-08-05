@@ -168,4 +168,10 @@ class EleveServices
     {
         return Eleve::count();
     }
+
+    public function getMatieresByEleveId($id)
+    {
+        $eleve = Eleve::with('classe.matieres')->findOrFail($id);
+        return response()->json($eleve->classe->matieres);
+    }
 }

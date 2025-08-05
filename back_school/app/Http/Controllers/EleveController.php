@@ -129,4 +129,17 @@ class EleveController extends Controller
             ], 500);
         }
     }
+
+    public function getMatieres($id)
+    {
+        try {
+            $matieres = $this->eleveServices->getMatieresByEleveId($id);
+            return response()->json($matieres);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => 'Erreur lors de la recuperation.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

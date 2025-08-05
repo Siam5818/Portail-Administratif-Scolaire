@@ -44,6 +44,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/recents/utilisateurs', [AuthController::class, 'recents']);
         Route::get('classes/recents/activites', [ClasseController::class, 'recents']);
         Route::get('classes/meilleur/moyenne', [ClasseController::class, 'meilleureMoyenne']);
+        Route::get('eleves/{id}/matieres', [EleveController::class, 'getMatieres']);
 
         // Route des api
         Route::apiResource('/classes', ClasseController::class);

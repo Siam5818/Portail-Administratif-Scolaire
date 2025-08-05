@@ -42,6 +42,7 @@
     <table class="table-auto w-full border-collapse border border-gray-300">
       <thead class="bg-gray-100">
         <tr>
+          <th class="border p-2">#</th>
           <th class="border p-2">Libellé</th>
           <th class="border p-2">Niveau</th>
           <th class="border p-2">Effectif</th>
@@ -52,6 +53,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let classe of resultatsClasse">
+          <td class="border p-2">{{ classe.id }}</td>
           <td class="border p-2">{{ classe.libelle }}</td>
           <td class="border p-2">{{ classe.niveau }}</td>
           <td class="border p-2">{{ classe.effectif ?? "—" }}</td>

@@ -54,12 +54,10 @@
   </div>
 
   <!-- Tableau -->
-  <table
-    class="w-full border-collapse"
-    *ngIf="!loading && notes.length"
-  >
+  <table class="w-full border-collapse" *ngIf="!loading && notes.length">
     <thead>
       <tr class="bg-gray-100 text-left">
+        <th class="border px-4 py-2">ID Élève</th>
         <th class="border px-4 py-2">Élève</th>
         <th class="border px-4 py-2">Matière</th>
         <th class="border px-4 py-2">Note</th>
@@ -69,6 +67,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let note of notes" class="hover:bg-gray-50">
+        <td class="border px-4 py-2">{{ note.eleve.id }}</td>
         <td class="border px-4 py-2">
           {{ note.eleve.user.prenom }} {{ note.eleve.user.nom }}
         </td>
