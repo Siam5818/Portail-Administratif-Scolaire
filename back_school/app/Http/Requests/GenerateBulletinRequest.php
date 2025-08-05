@@ -27,4 +27,15 @@ class GenerateBulletinRequest extends FormRequest
             'annee' => 'required|digits:4',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'eleve_id.required' => 'L\'identifiant de l\'élève est requis.',
+            'eleve_id.exists' => 'L\'élève spécifié n\'existe pas.',
+            'periode.required' => 'La période est obligatoire.',
+            'annee.required' => 'L\'année scolaire est obligatoire.',
+            'annee.digits' => 'L\'année doit contenir 4 chiffres.',
+        ];
+    }
 }

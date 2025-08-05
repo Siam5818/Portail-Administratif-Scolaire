@@ -60,11 +60,50 @@ class BulletinService
     }
 
     /**
+     * Regenere un bulletin
+     */
+    public function regenererPdf(Bulletin $bulletin): Bulletin
+    {
+        $notes = $bulletin->eleve->notes()->where('periode', $bulletin->periode)->get();
+        $moyenne = $this->calculerMoyennePonderee($notes);
+        $mention = $this->calculerMention($moyenne);
+
+        $pdfFileName = "bulletin_{$bulletin->eleve->id}_{$bulletin->periode}_{$bulletin->annee}.pdf";
+        $pdfContent = View::make('pdf.bulletin', [
+            'bulletin' => $bulletin,
+            'eleve' => $bulletin->eleve,
+            'notes' => $notes,
+            'moyenne' => $moyenne,
+            'mention' => $mention,
+        ]);
+
+        $pdf = Pdf::loadHTML($pdfContent)->setPaper('A4', 'portrait');
+        Storage::disk('public')->put("bulletins/{$pdfFileName}", $pdf->output());
+
+        $bulletin->update(['pdf_name' => $pdfFileName]);
+
+        $this->notificationService->envoyerNotificationsBulletin($bulletin);
+
+        return $bulletin;
+    }
+
+    /**
      * Retourne tous les bulletins avec PDF disponibles
      */
     public function bulletinsDisponibles()
     {
-        return Bulletin::all()->filter(fn($b) => $b->hasPdf());
+        return Bulletin::whereNotNull('pdf_name')->get();
+    }
+
+    /**
+     *  Vérifier existence d'un bulletins
+     */
+    public function bulletinExiste(Eleve $eleve, string $periode, int $annee): ?Bulletin
+    {
+        return Bulletin::where('eleve_id', $eleve->id)
+            ->where('periode', $periode)
+            ->where('annee', $annee)
+            ->first();
     }
 
     /**
@@ -73,6 +112,15 @@ class BulletinService
     public function supprimerFichierPdf(Bulletin $bulletin): bool
     {
         return Storage::disk('public')->delete("bulletins/{$bulletin->pdf_name}");
+    }
+
+    /**
+     * Suppression complet
+     */
+    public function supprimerBulletinComplet(Bulletin $bulletin): bool
+    {
+        $this->supprimerFichierPdf($bulletin);
+        return $bulletin->delete();
     }
 
     /**
@@ -107,7 +155,7 @@ class BulletinService
     }
 
     /**
-     * Génère un tableau structuré JSON pour affichage API ou Angular
+     * Génère un tableau structuré JSON pour affichage
      */
     public function getBulletinJson(Bulletin $bulletin): array
     {
@@ -149,6 +197,6 @@ class BulletinService
             $query->where('annee', $criteria['annee']);
         }
 
-        return $query->with('eleve')->get();
+        return $query->with('eleve.classe')->get();
     }
 }

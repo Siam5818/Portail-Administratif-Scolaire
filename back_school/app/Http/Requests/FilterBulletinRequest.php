@@ -22,8 +22,18 @@ class FilterBulletinRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'eleve_id' => 'nullable|exists:eleves,id',
             'periode' => 'nullable|string|max:10',
             'annee' => 'nullable|digits:4',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'eleve_id.exists' => 'L\'élève spécifié n\'existe pas.',
+            'periode.max' => 'La période ne doit pas dépasser 10 caractères.',
+            'annee.digits' => 'L\'année doit contenir 4 chiffres.',
         ];
     }
 }

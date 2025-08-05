@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Services\BulletinService;
 use App\Models\Bulletin;
 use App\Models\Eleve;
+use App\Http\Requests\GenerateBulletinRequest;
+use App\Http\Requests\FilterBulletinRequest;
+
 
 class BulletinController extends Controller
 {
@@ -32,18 +35,13 @@ class BulletinController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(GenerateBulletinRequest $request)
     {
-        $request->validate([
-            'eleve_id' => 'required|exists:eleves,id',
-            'periode' => 'required|string',
-            'annee' => 'required|integer',
-        ]);
+        $data = $request->validated();
 
-        // Vérifie si le bulletin existe déjà
-        $existing = Bulletin::where('eleve_id', $request->eleve_id)
-            ->where('periode', $request->periode)
-            ->where('annee', $request->annee)
+        $existing = Bulletin::where('eleve_id', $data['eleve_id'])
+            ->where('periode', $data['periode'])
+            ->where('annee', $data['annee'])
             ->first();
 
         if ($existing) {
@@ -54,9 +52,8 @@ class BulletinController extends Controller
             ], 409);
         }
 
-        // Création via le service
-        $eleve = Eleve::findOrFail($request->eleve_id);
-        $bulletin = $this->bulletinService->generateBulletin($eleve, $request->periode, $request->annee);
+        $eleve = Eleve::findOrFail($data['eleve_id']);
+        $bulletin = $this->bulletinService->generateBulletin($eleve, $data['periode'], $data['annee']);
 
         return response()->json([
             'message' => 'Bulletin généré avec succès.',
@@ -95,12 +92,7 @@ class BulletinController extends Controller
         $bulletin->save();
 
         $this->bulletinService->supprimerFichierPdf($bulletin);
-
-        $updatedBulletin = $this->bulletinService->generateBulletin(
-            $bulletin->eleve,
-            $bulletin->periode,
-            $bulletin->annee
-        );
+        $updatedBulletin = $this->bulletinService->regenererPdf($bulletin);
 
         return response()->json([
             'message' => 'Bulletin mis à jour et PDF regénéré. Notifications envoyées.',
@@ -117,7 +109,7 @@ class BulletinController extends Controller
         $bulletin = Bulletin::findOrFail($id);
 
         // Supprime le fichier PDF associé
-        if ($this->bulletinService->supprimerFichierPdf($bulletin)) {
+        if ($this->bulletinService->supprimerBulletinComplet($bulletin)) {
             $bulletin->delete();
             return response()->json(['message' => 'Bulletin supprimé avec succès.'], 200);
         }
@@ -128,9 +120,9 @@ class BulletinController extends Controller
     /**
      * Search for bulletins based on criteria.
      */
-    public function search(Request $request)
+    public function search(FilterBulletinRequest $request)
     {
-        $criteria = $request->only(['eleve_id', 'periode', 'annee']);
+        $criteria = $request->validated();
 
         try {
             $results = $this->bulletinService->searchBulletins($criteria);

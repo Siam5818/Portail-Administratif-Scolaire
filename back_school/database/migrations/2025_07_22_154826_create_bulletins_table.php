@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('bulletins', function (Blueprint $table) {
             $table->id();
             $table->foreignId('eleve_id')->constrained('eleves')->onDelete('cascade');
-            $table->string('periode');
-            $table->year('annee');
+            $table->string('periode')->index();
+            $table->year('annee')->index();
+            $table->enum('etat', ['non_generé', 'pré_rempli', 'validé'])->default('non_generé');
             $table->string('pdf_name')->nullable()->unique();
             $table->timestamps();
         });

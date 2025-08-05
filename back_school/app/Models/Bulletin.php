@@ -38,11 +38,20 @@ class Bulletin extends Model
         };
     }
 
-    public function calculMoyenne()
+    public function calculMoyenne(): float
     {
-        return $this->eleve->notes()
-            ->where('periode', $this->periode)
-            ->avg('note') ?? 0;
+        $notes = $this->eleve->notes()->where('periode', $this->periode)->get();
+
+        $totalPoints = 0;
+        $totalCoeff = 0;
+
+        foreach ($notes as $note) {
+            $coeff = $note->matiere->coefficient ?? 1;
+            $totalPoints += $note->note * $coeff;
+            $totalCoeff += $coeff;
+        }
+
+        return $totalCoeff > 0 ? round($totalPoints / $totalCoeff, 2) : 0;
     }
 
     public function notesParMatiere()
