@@ -26,4 +26,15 @@ class Note extends Model
     {
         return $this->belongsTo(Matiere::class);
     }
+
+    protected static function booted()
+    {
+        static::creating(function ($note) {
+            if (empty($note->annee_scolaire)) {
+                $note->annee_scolaire = now()->month >= 9
+                    ? now()->year . '-' . (now()->year + 1)
+                    : (now()->year - 1) . '-' . now()->year;
+            }
+        });
+    }
 }

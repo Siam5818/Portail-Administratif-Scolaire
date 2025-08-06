@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { Eleve } from '../models/eleve';
 import { EleveFormPayload } from '../models/eleve-form-payload';
 import { EleveResponse } from '../models/eleve-response';
+import { EleveAnnotationStatus } from '../models/eleve-annotation-status';
 
 @Injectable({
   providedIn: 'root',
@@ -88,6 +89,26 @@ export class EleveService {
       .get<any>(this.countUrl, {
         headers: this.getHeaders(),
       })
+      .pipe(catchError(this.handleError));
+  }
+
+  getAnnotationStatus() {
+    return this.httpclient.get<EleveAnnotationStatus[]>(
+      `${this.api_Url}/annotation-status`,
+      { headers: this.getHeaders() }
+    );
+  }
+
+  searchAnnotationStatus(term: string) {
+    const params = new HttpParams().set('query', term);
+    return this.httpclient
+      .get<EleveAnnotationStatus[]>(
+        `${this.api_Url}/annotation-status/search`,
+        {
+          headers: this.getHeaders(),
+          params: params,
+        }
+      )
       .pipe(catchError(this.handleError));
   }
 }

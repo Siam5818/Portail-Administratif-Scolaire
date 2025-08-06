@@ -5,6 +5,7 @@ import { NoteService } from '../../../../services/note.service';
 import { AuthService } from '../../../../services/auth.service';
 import { Note } from '../../../../models/note';
 import { Matiere } from '../../../../models/matiere';
+import { MatiereService } from '../../../../services/matiere.service';
 
 @Component({
   selector: 'app-noteform',
@@ -26,7 +27,8 @@ export class NotesFormComponent implements OnInit {
     private authService: AuthService,
     private routeActiv: ActivatedRoute,
     private router: Router,
-    private noteService: NoteService
+    private noteService: NoteService,
+    private matiereService: MatiereService
   ) {}
 
   ngOnInit(): void {
@@ -80,7 +82,7 @@ export class NotesFormComponent implements OnInit {
         });
 
         // Charger les matières de l'élève
-        this.noteService.getMatieresByEleveId(note.eleve.id).subscribe({
+        this.matiereService.getMatieresByEleveId(note.eleve.id).subscribe({
           next: (data) => {
             this.matieres = data;
           },
@@ -147,7 +149,7 @@ export class NotesFormComponent implements OnInit {
     this.matiereVideMessage = null;
 
     if (eleveId) {
-      this.noteService.getMatieresByEleveId(eleveId).subscribe({
+      this.matiereService.getMatieresByEleveId(eleveId).subscribe({
         next: (data) => {
           this.matieres = data;
 

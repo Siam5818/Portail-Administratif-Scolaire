@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Eleve } from '../../../../models/eleve';
 import { EleveService } from '../../../../services/eleve.service';
-import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'app-eleve-list',
@@ -16,19 +15,10 @@ export class EleveComponent implements OnInit {
   errorMessage = '';
   searchTerm = '';
 
-  constructor(
-    private eleveService: EleveService,
-    private router: Router,
-    private authService: AuthService
-  ) {}
+  constructor(private eleveService: EleveService, private router: Router) {}
 
   ngOnInit(): void {
-    // Vérifier si l'utilisateur est connecté avant de charger les données
-    if (this.authService.isLoggedIn()) {
-      this.onGetAll();
-    } else {
-      this.router.navigate(['/login']);
-    }
+    this.onGetAll();
   }
 
   onGetAll(): void {

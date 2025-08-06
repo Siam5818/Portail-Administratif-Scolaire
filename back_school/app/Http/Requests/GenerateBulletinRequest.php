@@ -24,7 +24,7 @@ class GenerateBulletinRequest extends FormRequest
         return [
             'eleve_id' => 'required|exists:eleves,id',
             'periode' => 'required|string|max:10',
-            'annee' => 'required|digits:4',
+            'annee' => ['required', 'regex:/^\d{4}-\d{4}$/'],
         ];
     }
 
@@ -35,7 +35,7 @@ class GenerateBulletinRequest extends FormRequest
             'eleve_id.exists' => 'L\'élève spécifié n\'existe pas.',
             'periode.required' => 'La période est obligatoire.',
             'annee.required' => 'L\'année scolaire est obligatoire.',
-            'annee.digits' => 'L\'année doit contenir 4 chiffres.',
+            'annee.regex' => 'Le format de l\'année doit être "YYYY-YYYY", comme 2025-2026.',
         ];
     }
 }

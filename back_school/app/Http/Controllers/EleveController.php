@@ -142,4 +142,30 @@ class EleveController extends Controller
             ], 500);
         }
     }
+
+    public function getAnnotationStatus()
+    {
+        try {
+            $statusList = $this->eleveServices->getAnnotationStatus();
+            return response()->json($statusList);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => 'Erreur lors du calcul du statut.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function searchAnnotationStatus(Request $request)
+    {
+        try {
+            $statusList = $this->eleveServices->searchAnnotationStatus($request);
+            return response()->json($statusList);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => 'Erreur lors de la recherche des annotations.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

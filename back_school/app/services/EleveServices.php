@@ -8,6 +8,8 @@ use App\Models\Tuteur;
 use Illuminate\Support\Facades\DB;
 use App\Services\TuteurService;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
+
 
 class EleveServices
 {
@@ -173,5 +175,78 @@ class EleveServices
     {
         $eleve = Eleve::with('classe.matieres')->findOrFail($id);
         return response()->json($eleve->classe->matieres);
+    }
+
+    public function getAnnotationStatus()
+    {
+        $eleves = Eleve::with(['user', 'classe.matieres', 'notes'])->get();
+
+        $statusList = $eleves->map(function ($eleve) {
+            if (!$eleve->classe) {
+                return [
+                    'eleve_id' => $eleve->id,
+                    'nom' => optional($eleve->user)->nom,
+                    'prenom' => optional($eleve->user)->prenom,
+                    'classe' => 'Non assignée',
+                    'total_matieres' => 0,
+                    'notes_renseignees' => 0,
+                    'pourcentage' => 0,
+                    'bulletin_generable' => false,
+                ];
+            }
+
+            $matiereIds = $eleve->classe->matieres->pluck('id');
+            $totalMatieres = $matiereIds->count();
+            $notesRenseignees = $eleve->notes->whereIn('matiere_id', $matiereIds)->count();
+
+            $pourcentage = $totalMatieres > 0
+                ? round(($notesRenseignees / $totalMatieres) * 100)
+                : 0;
+
+            return [
+                'eleve_id' => $eleve->id,
+                'nom' => optional($eleve->user)->nom,
+                'prenom' => optional($eleve->user)->prenom,
+                'classe' => $eleve->classe->libelle,
+                'total_matieres' => $totalMatieres,
+                'notes_renseignees' => $notesRenseignees,
+                'pourcentage' => $pourcentage,
+                'bulletin_generable' => $pourcentage === 100,
+            ];
+        });
+
+        return $statusList;
+    }
+
+    public function searchAnnotationStatus(Request $request)
+    {
+        $query = strtolower($request->query('query'));
+
+        $eleves = Eleve::with(['user', 'classe.matieres', 'notes'])
+            ->whereHas('user', function ($q) use ($query) {
+                $q->whereRaw('LOWER(nom) LIKE ?', ["%{$query}%"])
+                    ->orWhereRaw('LOWER(prenom) LIKE ?', ["%{$query}%"]);
+            })
+            ->get();
+
+        $statusList = $eleves->map(function ($eleve) {
+            $matiereIds = $eleve->classe?->matieres->pluck('id') ?? collect();
+            $totalMatieres = $matiereIds->count();
+            $notesRenseignees = $eleve->notes->whereIn('matiere_id', $matiereIds)->count();
+            $pourcentage = $totalMatieres > 0 ? round(($notesRenseignees / $totalMatieres) * 100) : 0;
+
+            return [
+                'eleve_id' => $eleve->id,
+                'nom' => optional($eleve->user)->nom,
+                'prenom' => optional($eleve->user)->prenom,
+                'classe' => optional($eleve->classe)->libelle ?? 'Non assignée',
+                'total_matieres' => $totalMatieres,
+                'notes_renseignees' => $notesRenseignees,
+                'pourcentage' => $pourcentage,
+                'bulletin_generable' => $pourcentage === 100,
+            ];
+        });
+
+        return response()->json($statusList);
     }
 }

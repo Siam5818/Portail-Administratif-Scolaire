@@ -90,4 +90,12 @@ export class MatiereService {
       })
       .pipe(catchError(this.handleError));
   }
+
+  getMatieresByEleveId(id: number) {
+    return this.httpclient
+      .get<Matiere[]>(this.api_Url + '/' + id + '/matieres', {
+        headers: this.getHeaders(),
+      })
+      .pipe(catchError(this.handleError));
+  }
 }

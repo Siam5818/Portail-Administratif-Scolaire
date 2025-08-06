@@ -10,6 +10,10 @@ use Illuminate\Database\Eloquent\Model;
 class Bulletin extends Model
 {
     use HasFactory, Notifiable, HasApiTokens;
+    public const ETAT_NON_GENERE = 'non_generé';
+    public const ETAT_PRE_REMPLI = 'pré_rempli';
+    public const ETAT_VALIDE = 'validé';
+
 
     protected $guarded = [];
 
@@ -20,9 +24,11 @@ class Bulletin extends Model
         return $this->belongsTo(Eleve::class);
     }
 
-    public function getPdfUrlAttribute()
+    public function getPdfUrlAttribute(): ?string
     {
-        return url('storage/bulletins/' . $this->pdf_name);
+        return $this->pdf_name
+            ? asset("storage/bulletins/{$this->pdf_name}")
+            : null;
     }
 
     public function getMentionAttribute()
@@ -30,11 +36,24 @@ class Bulletin extends Model
         $moyenne = $this->calculMoyenne();
 
         return match (true) {
-            $moyenne >= 16 => 'Très Bien',
-            $moyenne >= 14 => 'Bien',
-            $moyenne >= 12 => 'Assez Bien',
+            $moyenne >= 16 => 'Excellent',
+            $moyenne >= 14 => 'Très Bien',
+            $moyenne >= 12 => 'Bien',
             $moyenne >= 10 => 'Passable',
-            default => 'Insuffisant',
+            $moyenne !== null => 'Insuffisant',
+            default => '—',
+        };
+    }
+
+    public function getAppreciationAttribute(): string
+    {
+        return match (true) {
+            $this->note >= 16 => 'Excellent',
+            $this->note >= 14 => 'Très Bien',
+            $this->note >= 12 => 'Bien',
+            $this->note >= 10 => 'Passable',
+            $this->note !== null => 'Insuffisant',
+            default => '—',
         };
     }
 

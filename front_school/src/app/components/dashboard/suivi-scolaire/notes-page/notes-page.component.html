@@ -62,6 +62,7 @@
         <th class="border px-4 py-2">Matière</th>
         <th class="border px-4 py-2">Note</th>
         <th class="border px-4 py-2">Période</th>
+        <th class="border px-4 py-2">Annee</th>
         <th class="border px-4 py-2">Actions</th>
       </tr>
     </thead>
@@ -74,6 +75,7 @@
         <td class="border px-4 py-2">{{ note.matiere.nom }}</td>
         <td class="border px-4 py-2">{{ note.note }}</td>
         <td class="border px-4 py-2">{{ note.periode }}</td>
+        <td class="border px-4 py-2">{{ note.annee_scolaire }}</td>
         <td class="border px-4 py-2 space-x-2">
           <button
             [routerLink]="['/suivi-scolaire/modifier-note', note.id]"

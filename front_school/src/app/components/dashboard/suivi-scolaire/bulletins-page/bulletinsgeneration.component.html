@@ -1,0 +1,92 @@
+<div class="p-6 bg-white shadow rounded max-w-5xl mx-auto mt-6">
+  <!-- Messages -->
+  <div *ngIf="errorMessage" class="text-red-600 mb-4 flex items-center">
+    <i class="fas fa-exclamation-circle mr-2"></i> {{ errorMessage }}
+  </div>
+  <div *ngIf="successMessage" class="text-green-600 mb-4 flex items-center">
+    <i class="fas fa-check-circle mr-2"></i> {{ successMessage }}
+  </div>
+
+  <!-- Titre -->
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-semibold text-gray-800">
+      <i class="fas fa-file-alt text-blue-600 mr-2"></i> Génération du Bulletin pour
+      <span class="text-blue-600">{{ eleve.user.nom }}</span>
+    </h2>
+    <button routerLink="/suivi-scolaire/bulletins" class="text-sm text-gray-600 hover:text-blue-600 flex items-center">
+      <i class="fas fa-arrow-left mr-1"></i> Retour à la liste
+    </button>
+  </div>
+
+  <!-- Formulaire -->
+  <form [formGroup]="bulletinForm" (ngSubmit)="createBulletin()" class="space-y-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label for="periode" class="block text-sm font-medium text-gray-700 mb-1">Période *</label>
+        <select formControlName="periode" id="periode" class="w-full border px-3 py-2 rounded focus:outline-none focus:ring focus:border-blue-300">
+          <option value="">Sélectionner une période</option>
+          <option value="Trimestre 1">Trimestre 1</option>
+          <option value="Trimestre 2">Trimestre 2</option>
+          <option value="Trimestre 3">Trimestre 3</option>
+        </select>
+      </div>
+      <div>
+        <label for="annee" class="block text-sm font-medium text-gray-700 mb-1">Année *</label>
+        <input type="number" formControlName="annee" id="annee" min="2000" [max]="currentYear" class="w-full border px-3 py-2 rounded focus:outline-none focus:ring focus:border-blue-300" />
+      </div>
+    </div>
+
+    <div>
+      <button type="submit" [disabled]="bulletinForm.invalid || isLoading" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center">
+        <i *ngIf="isLoading" class="fas fa-spinner fa-spin mr-2"></i>
+        <i *ngIf="!isLoading" class="fas fa-paper-plane mr-2"></i>
+        Générer le Bulletin
+      </button>
+    </div>
+  </form>
+
+  <!-- Bulletin généré -->
+  <div *ngIf="generatedBulletin" class="mt-10 bg-gray-50 p-6 rounded shadow">
+    <h3 class="text-xl font-semibold mb-4 flex items-center">
+      <i class="fas fa-file-alt text-green-600 mr-2"></i> Bulletin Généré
+    </h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <p><strong>Période :</strong> {{ generatedBulletin.periode | titlecase }}</p>
+      <p><strong>Année :</strong> {{ generatedBulletin.annee }}</p>
+      <p><strong>Moyenne :</strong> {{ generatedBulletin.moyenne }}</p>
+      <p><strong>Mention :</strong> {{ generatedBulletin.mention }}</p>
+    </div>
+
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="bg-gray-100 text-left">
+          <th class="border px-4 py-2">Matière</th>
+          <th class="border px-4 py-2">Note</th>
+          <th class="border px-4 py-2">Coefficient</th>
+          <th class="border px-4 py-2">Note Pondérée</th>
+          <th class="border px-4 py-2">Appréciation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let note of generatedBulletin.notes" class="hover:bg-gray-50">
+          <td class="border px-4 py-2">{{ note.matiere }}</td>
+          <td class="border px-4 py-2">{{ note.note ?? '—' }}</td>
+          <td class="border px-4 py-2">{{ note.coefficient }}</td>
+          <td class="border px-4 py-2">
+            <span *ngIf="note.note !== null; else noNote">
+              {{ note.note * note.coefficient | number : '1.2-2' }}
+            </span>
+            <ng-template #noNote>—</ng-template>
+          </td>
+          <td class="border px-4 py-2" [ngClass]="getAppreciationClass(note.appreciation)">
+            {{ note.appreciation }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <a *ngIf="generatedBulletin.pdf_url" [href]="generatedBulletin.pdf_url" target="_blank" class="inline-block mt-6 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 items-center">
+      <i class="fas fa-download mr-2"></i> Télécharger le PDF
+    </a>
+  </div>
+</div>

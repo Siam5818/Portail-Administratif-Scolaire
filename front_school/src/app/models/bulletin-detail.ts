@@ -1,16 +1,22 @@
 export class BulletinDetail {
   eleve!: {
     nom: string;
-    classe: string;
+    prenom: string;
+    matricule: string;
+    date_naissance: string;
+    classe: {
+      libelle: string;
+    };
   };
   periode!: string;
   annee!: number;
   notes!: {
     matiere: string;
-    note: number;
+    note: number | null;
     coefficient: number;
+    appreciation: string;
   }[];
   moyenne!: number;
   mention!: string;
-  pdf!: string | null;
+  pdf_url!: string | null;
 }

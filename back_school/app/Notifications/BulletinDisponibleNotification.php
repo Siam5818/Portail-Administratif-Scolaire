@@ -46,7 +46,7 @@ class BulletinDisponibleNotification extends Notification
             ->line('Ton bulletin de notes pour la période ' . $this->bulletin->periode . ' ' . $this->bulletin->annee . ' est maintenant disponible.')
             ->line('Ta moyenne générale : ' . $moyenne . '/20')
             ->line('Mention obtenue : ' . $mention)
-            ->action('Consulter ton bulletin', url($frontendUrl . '/espace-famille'))
+            ->action('Consulter ton bulletin', url($frontendUrl . '/login'))
             ->line('N\'oublie pas de le partager avec tes parents !')
             ->line('Continue tes efforts pour la prochaine période !');
     }

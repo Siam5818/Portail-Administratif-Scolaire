@@ -13,12 +13,12 @@ import { ClassesComponent } from './components/dashboard/classes/classes.compone
 import { MatieresComponent } from './components/dashboard/matieres/matieres.component';
 import { BulletinsPageComponent } from './components/dashboard/suivi-scolaire/bulletins-page/bulletins-page.component';
 import { NotesPageComponent } from './components/dashboard/suivi-scolaire/notes-page/notes-page.component';
-import { SuiviScolaireComponent } from './components/dashboard/suivi-scolaire/suivi-scolaire.component';
 import { EleveFormComponent } from './components/dashboard/utilisateur/eleve/eleveform.component';
 import { EnseignantFormComponent } from './components/dashboard/utilisateur/enseignant/enseignantform.component';
 import { MatiereFormComponent } from './components/dashboard/matieres/matiereform.component';
 import { ClasseFormComponent } from './components/dashboard/classes/classeform.component';
 import { NotesFormComponent } from './components/dashboard/suivi-scolaire/notes-page/notefrom.component';
+import { BulletinsGenerationComponent } from './components/dashboard/suivi-scolaire/bulletins-page/bulletinsgeneration.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -119,6 +119,11 @@ const routes: Routes = [
   {
     path: 'suivi-scolaire/bulletins',
     component: BulletinsPageComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'suivi-scolaire/bulletins/generer/:id',
+    component: BulletinsGenerationComponent,
     canActivate: [authGuard],
   },
   // Espace enseignant

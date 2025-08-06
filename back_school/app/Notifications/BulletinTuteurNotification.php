@@ -46,7 +46,7 @@ class BulletinTuteurNotification extends Notification
             ->line('Le bulletin de notes de ' . $eleve->prenom . ' pour la période ' . $this->bulletin->periode . ' ' . $this->bulletin->annee . ' est maintenant disponible.')
             ->line('Moyenne générale : ' . $moyenne . '/20')
             ->line('Mention obtenue : ' . $mention)
-            ->action('Consulter le bulletin', url($frontendUrl . '/espace-famille'))
+            ->action('Consulter le bulletin', url($frontendUrl . '/login'))
             ->line('Nous vous invitons à consulter ce bulletin et à discuter des résultats avec ' . $eleve->prenom . '.')
             ->line('N\'hésitez pas à contacter l\'établissement si vous avez des questions.');
     }

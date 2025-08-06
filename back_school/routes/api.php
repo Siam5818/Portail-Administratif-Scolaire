@@ -9,12 +9,6 @@ use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\BulletinController;
 use App\Http\Controllers\TuteurController;
-use App\Models\Classe;
-use App\Models\Eleve;
-use App\Models\Enseignant;
-use App\Models\Matiere;
-use App\Models\Tuteur;
-use Psy\Command\ListCommand\ClassConstantEnumerator;
 
 Route::prefix('v1')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
@@ -45,6 +39,8 @@ Route::prefix('v1')->group(function () {
         Route::get('classes/recents/activites', [ClasseController::class, 'recents']);
         Route::get('classes/meilleur/moyenne', [ClasseController::class, 'meilleureMoyenne']);
         Route::get('eleves/{id}/matieres', [EleveController::class, 'getMatieres']);
+        Route::get('eleves/annotation-status', [EleveController::class, 'getAnnotationStatus']);
+        Route::get('/eleves/annotation-status/search', [EleveController::class, 'searchAnnotationStatus']);
 
         // Route des api
         Route::apiResource('/classes', ClasseController::class);

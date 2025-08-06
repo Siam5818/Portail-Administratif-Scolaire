@@ -85,13 +85,19 @@ class BulletinController extends Controller
             'periode' => 'nullable|string',
             'annee' => 'nullable|integer',
         ]);
+
         $bulletin = Bulletin::findOrFail($id);
 
+        // Mise à jour des champs
         $bulletin->periode = $request->periode ?? $bulletin->periode;
         $bulletin->annee = $request->annee ?? $bulletin->annee;
+        $bulletin->etat = Bulletin::ETAT_PRE_REMPLI; // Optionnel : marquer comme modifié
         $bulletin->save();
 
+        // Supprimer l'ancien PDF
         $this->bulletinService->supprimerFichierPdf($bulletin);
+
+        // Régénérer le PDF avec les nouvelles données
         $updatedBulletin = $this->bulletinService->regenererPdf($bulletin);
 
         return response()->json([

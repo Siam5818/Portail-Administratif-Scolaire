@@ -1,16 +1,14 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, throwError } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Note } from '../models/note';
-import { Matiere } from '../models/matiere';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NoteService {
   private api_Url = 'http://127.0.0.1:8000/api/v1/notes';
-  private eleveApiUrl = 'http://127.0.0.1:8000/api/v1/eleves';
 
   constructor(
     private httpclient: HttpClient,
@@ -25,13 +23,9 @@ export class NoteService {
   }
 
   private getHeaders(): HttpHeaders {
-    const token = this.authservice.getToken();
-    if (token) {
-      return new HttpHeaders({
-        Authorization: 'Bearer ' + token,
-      });
-    }
-    return new HttpHeaders();
+    return new HttpHeaders({
+      Authorization: 'Bearer ' + this.authservice.getToken(),
+    });
   }
 
   getNotes() {
@@ -79,31 +73,14 @@ export class NoteService {
     matiere_id?: number;
     periode?: string;
   }) {
-    const params = new HttpParams({ fromObject: filters });
-
     return this.httpclient
-      .get<Note[]>(this.searchUrl, {
+      .post<Note[]>(this.searchUrl, filters, {
         headers: this.getHeaders(),
-        params,
       })
       .pipe(catchError(this.handleError));
   }
 
   getNotesByEleveId(eleveId: number) {
     return this.search({ eleve_id: eleveId });
-  }
-
-  getMatieresByEleveId(eleveId: number) {
-    const url = `${this.eleveApiUrl}/${eleveId}/matieres`;
-
-    return this.httpclient
-      .get<any>(url, {
-        headers: this.getHeaders(),
-      })
-      .pipe(
-        catchError(this.handleError),
-        // Extraire le tableau de matières
-        map((response) => response.original as Matiere[])
-      );
   }
 }

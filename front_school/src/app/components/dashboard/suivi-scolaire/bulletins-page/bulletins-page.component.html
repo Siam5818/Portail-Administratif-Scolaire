@@ -1,1 +1,107 @@
-<p>bulletins-page works!</p>
+<div class="p-6 bg-white shadow rounded">
+  <!-- Filtres -->
+  <div class="flex items-center gap-2 mb-4">
+    <input
+      [(ngModel)]="searchTerm"
+      placeholder="Rechercher un élève..."
+      class="px-3 py-2 border rounded w-full md:w-1/3"
+    />
+    <button
+      (click)="onSearch()"
+      class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 flex items-center"
+    >
+      <i class="fas fa-search mr-2"></i> Rechercher
+    </button>
+    <button
+      (click)="onResetForm()"
+      class="px-4 py-2 bg-red-100 text-red-600 rounded hover:bg-red-200 flex items-center"
+    >
+      <i class="fas fa-undo mr-2"></i> Réinitialiser
+    </button>
+  </div>
+
+  <!-- Messages -->
+  <div *ngIf="errorMessage" class="text-red-600 mb-4">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="loading" class="text-gray-500 mb-4">
+    <i class="fas fa-spinner fa-spin mr-2"></i> Chargement des bulletins...
+  </div>
+
+  <!-- Tableau -->
+  <table
+    class="w-full border-collapse"
+    *ngIf="!loading && annotationStatusList.length"
+  >
+    <thead>
+      <tr class="bg-gray-100 text-left">
+        <th class="border px-4 py-2">#</th>
+        <th class="border px-4 py-2">Nom</th>
+        <th class="border px-4 py-2">Classe</th>
+        <th class="border px-4 py-2">Notes</th>
+        <th class="border px-4 py-2">Pourcentage</th>
+        <th class="border px-4 py-2">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let eleve of annotationStatusList" class="hover:bg-gray-50">
+        <td class="border px-4 py-2">{{ eleve.eleve_id }}</td>
+        <td class="border px-4 py-2">{{ eleve.nom }}</td>
+        <td class="border px-4 py-2">{{ eleve.classe }}</td>
+        <td class="border px-4 py-2">
+          {{ eleve.notes_renseignees }}/{{ eleve.total_matieres }}
+        </td>
+        <td class="border px-4 py-2">
+          <span
+            [ngClass]="{
+              'text-green-600 font-semibold': eleve.pourcentage === 100,
+              'text-yellow-600': eleve.pourcentage < 100
+            }"
+          >
+            {{ eleve.pourcentage }}%
+          </span>
+        </td>
+        <td class="border px-4 py-2 space-x-2 flex items-center">
+          <button
+            [disabled]="!bulletinGenerable(eleve)"
+            (click)="genererBulletin(eleve)"
+            class="text-blue-600 hover:text-blue-800"
+            title="Générer"
+          >
+            <i
+              *ngIf="bulletinGenerable(eleve)"
+              class="fas fa-check-circle text-green-500 ml-2"
+            ></i>
+            <i
+              *ngIf="!bulletinGenerable(eleve)"
+              class="fas fa-exclamation-circle text-yellow-500 ml-2"
+            ></i>
+          </button>
+
+          <span
+            class="text-xs px-2 py-1 rounded font-semibold"
+            [ngClass]="{
+              'bg-green-100 text-green-700': bulletinGenerable(eleve),
+              'bg-yellow-100 text-yellow-700': !bulletinGenerable(eleve)
+            }"
+          >
+            {{
+              bulletinGenerable(eleve)
+                ? "Bulletin prêt a generer"
+                : "Bulletin incomplet"
+            }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Aucun résultat -->
+  <div
+    *ngIf="dataLoaded && !loading && !annotationStatusList.length"
+    class="mt-4 text-center text-gray-500"
+  >
+    <i class="fas fa-info-circle mr-2"></i> Aucun bulletin disponible.
+  </div>
+</div>

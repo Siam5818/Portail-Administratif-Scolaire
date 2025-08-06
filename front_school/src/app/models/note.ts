@@ -7,4 +7,5 @@ export class Note {
   periode!: string;
   eleve!: Eleve;
   matiere!: Matiere;
+  annee_scolaire!: string;
 }

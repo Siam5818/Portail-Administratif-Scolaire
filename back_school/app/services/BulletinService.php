@@ -7,6 +7,7 @@ use App\Models\Eleve;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Str;
 use App\Services\NotificationService;
 
 class BulletinService
@@ -21,13 +22,29 @@ class BulletinService
     /**
      * Génère un bulletin pour un élève donné, à une période et une année précises
      */
+
     public function generateBulletin(Eleve $eleve, string $periode, int $annee): Bulletin
     {
-        // Récupération des notes
-        $notes = $eleve->notes()->where('periode', $periode)->get();
+        $classe = $eleve->classe;
+        $matieres = $classe->matieres;
+        $notes = $eleve->notes()
+            ->where('periode', $periode)
+            ->where('annee_scolaire', $annee)
+            ->get();
 
-        // Calcul moyenne pondérée
-        $moyenne = $this->calculerMoyennePonderee($notes);
+        // Associer chaque matière à sa note
+        $bulletinNotes = $matieres->map(function ($matiere) use ($notes) {
+            $note = $notes->firstWhere('matiere_id', $matiere->id);
+            return [
+                'matiere' => $matiere->nom,
+                'note' => $note->note ?? null,
+                'coefficient' => $matiere->coefficient ?? 1,
+                'appreciation' => $note?->appreciation ?? '—',
+            ];
+        });
+
+        // Calcul moyenne et mention
+        $moyenne = $this->calculerMoyennePonderee($bulletinNotes);
         $mention = $this->calculerMention($moyenne);
 
         // Création du bulletin
@@ -36,24 +53,34 @@ class BulletinService
             'periode' => $periode,
             'annee' => $annee,
             'pdf_name' => null,
+            'etat' => Bulletin::ETAT_NON_GENERE,
         ]);
 
         // Génération du PDF
-        $pdfFileName = "bulletin_{$eleve->id}_{$periode}_{$annee}.pdf";
-        $pdfContent = View::make('pdf.bulletin', [
+        $pdfFileName = Str::slug("bulletin_{$eleve->id}_{$periode}_{$annee}") . '.pdf';
+        $pdfContent = View::make('bulletin', [
             'bulletin' => $bulletin,
             'eleve' => $eleve,
-            'notes' => $notes,
+            'notes' => $bulletinNotes,
             'moyenne' => $moyenne,
             'mention' => $mention,
+            'periode' => $periode,
+            'annee' => $annee,
         ]);
 
         $pdf = Pdf::loadHTML($pdfContent)->setPaper('A4', 'portrait');
         Storage::disk('public')->put("bulletins/{$pdfFileName}", $pdf->output());
 
-        $bulletin->update(['pdf_name' => $pdfFileName]);
+        // Vérification et mise à jour
+        if (!Storage::disk('public')->exists("bulletins/{$pdfFileName}")) {
+            throw new \Exception("Échec de la génération du PDF.");
+        }
 
-        // Envoi des notifications
+        $bulletin->update([
+            'pdf_name' => $pdfFileName,
+            'etat' => Bulletin::ETAT_VALIDE
+        ]);
+
         $this->notificationService->envoyerNotificationsBulletin($bulletin);
 
         return $bulletin;
@@ -64,23 +91,51 @@ class BulletinService
      */
     public function regenererPdf(Bulletin $bulletin): Bulletin
     {
-        $notes = $bulletin->eleve->notes()->where('periode', $bulletin->periode)->get();
-        $moyenne = $this->calculerMoyennePonderee($notes);
+        $eleve = $bulletin->eleve;
+        $classe = $eleve->classe;
+        $matieres = $classe->matieres;
+
+        // Filtrer les notes par période et année scolaire
+        $notes = $eleve->notes()
+            ->where('periode', $bulletin->periode)
+            ->where('annee_scolaire', $bulletin->annee)
+            ->get();
+
+        // Associer chaque matière à sa note
+        $bulletinNotes = $matieres->map(function ($matiere) use ($notes) {
+            $note = $notes->firstWhere('matiere_id', $matiere->id);
+            return [
+                'matiere' => $matiere->nom,
+                'note' => $note->note ?? null,
+                'coefficient' => $matiere->coefficient ?? 1,
+                'appreciation' => $note?->appreciation ?? '—',
+            ];
+        });
+
+        // Calcul moyenne et mention
+        $moyenne = $this->calculerMoyennePonderee($bulletinNotes);
         $mention = $this->calculerMention($moyenne);
 
-        $pdfFileName = "bulletin_{$bulletin->eleve->id}_{$bulletin->periode}_{$bulletin->annee}.pdf";
-        $pdfContent = View::make('pdf.bulletin', [
+        // Génération du PDF
+        $pdfFileName = Str::slug("bulletin_{$eleve->id}_{$bulletin->periode}_{$bulletin->annee}") . '.pdf';
+        $pdfContent = View::make('bulletin', [
             'bulletin' => $bulletin,
-            'eleve' => $bulletin->eleve,
-            'notes' => $notes,
+            'eleve' => $eleve,
+            'notes' => $bulletinNotes,
             'moyenne' => $moyenne,
             'mention' => $mention,
+            'periode' => $bulletin->periode,
+            'annee' => $bulletin->annee,
         ]);
 
         $pdf = Pdf::loadHTML($pdfContent)->setPaper('A4', 'portrait');
         Storage::disk('public')->put("bulletins/{$pdfFileName}", $pdf->output());
 
-        $bulletin->update(['pdf_name' => $pdfFileName]);
+        // Mise à jour du bulletin
+        $bulletin->update([
+            'pdf_name' => $pdfFileName,
+            'etat' => Bulletin::ETAT_VALIDE,
+        ]);
 
         $this->notificationService->envoyerNotificationsBulletin($bulletin);
 
@@ -98,7 +153,7 @@ class BulletinService
     /**
      *  Vérifier existence d'un bulletins
      */
-    public function bulletinExiste(Eleve $eleve, string $periode, int $annee): ?Bulletin
+    public function bulletinExiste(Eleve $eleve, string $periode, string $annee): ?Bulletin
     {
         return Bulletin::where('eleve_id', $eleve->id)
             ->where('periode', $periode)
@@ -132,9 +187,10 @@ class BulletinService
         $totalCoeff = 0;
 
         foreach ($notes as $note) {
-            $coeff = $note->matiere->coefficient ?? 1;
-            $totalPoints += $note->note * $coeff;
-            $totalCoeff += $coeff;
+            if ($note['note'] !== null) {
+                $totalPoints += $note['note'] * $note['coefficient'];
+                $totalCoeff += $note['coefficient'];
+            }
         }
 
         return $totalCoeff > 0 ? round($totalPoints / $totalCoeff, 2) : 0;
